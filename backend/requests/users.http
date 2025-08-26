@@ -1,0 +1,44 @@
+################################
+## GET - PER TUTTI GLI UTENTI ##
+################################
+GET http://localhost:4000/api/v1/users
+
+
+########################################################
+## GET - PER UTENTE SPECIFICO (vedi dopo '/users/..') ##
+########################################################
+GET http://localhost:4000/api/v1/users/2
+
+
+##################################
+## POST - PER AGGIUNGERE UTENTE ##
+##################################
+POST http://localhost:4000/api/v1/users
+Content-Type: application/json
+
+{
+    "id" : 3,
+    "username" : "nomeDaAggiungere"
+}
+
+
+###############################################################################
+## PUT - PER AGGORNARE UN UTENTE ESISTENTE (in questo caso utente con id: 1) ##
+###############################################################################
+PUT http://localhost:4000/api/v1/users/1
+Content-Type: application/json
+
+{
+    "username" : "nomeDaAggiornare"
+}
+
+
+########################################################################
+## DELETE - PER ELIMINARE UN UTENTE (in questo caso utente con id: 1) ##
+########################################################################
+DELETE http://localhost:4000/api/v1/users/1
+
+{
+    "id" : 3,
+    "username" : "utenteDaEliminare"
+}
