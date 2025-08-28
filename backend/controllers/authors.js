@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import Author from "../models/Author.js";
 
+//////////////////////////////////
+///// GET - TUTTI GLI AUTORI /////
+//////////////////////////////////
 export async function getAll(request, response) {
   try {
     const authors = await Author.find();
@@ -12,6 +15,9 @@ export async function getAll(request, response) {
   }
 }
 
+/////////////////////////////////////////
+///// POST - CREAZIONE DEGLI AUTORI /////
+/////////////////////////////////////////
 export async function create(request, response) {
   try {
     const { nome, cognome, email, dataDiNascita, avatar } = request.body;
@@ -40,7 +46,10 @@ export async function create(request, response) {
   }
 }
 
-export async function get(request, response) {
+////////////////////////////////
+///// GET - SINGOLO AUTORE /////
+////////////////////////////////
+export async function getOne(request, response) {
   try {
     const { id } = request.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -58,6 +67,9 @@ export async function get(request, response) {
   }
 }
 
+////////////////////////////////
+///// PUT - SINGOLO AUTORE /////
+////////////////////////////////
 export async function put(request, response) {
   try {
     const { id } = request.params;
@@ -93,6 +105,9 @@ export async function put(request, response) {
   }
 }
 
+///////////////////////////////////
+///// DELETE - SINGOLO AUTORE /////
+///////////////////////////////////
 export async function remove(request, response) {
   try {
     const { id } = request.params;
