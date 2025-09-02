@@ -20,16 +20,15 @@ export async function getAll(request, response) {
 /////////////////////////////////////
 export async function create(request, response) {
   try {
-    const { QUALCOSA, QUALCOSA1, QUALCOSA2 } = request.body;
-    if (!QUALCOSA || !QUALCOSA1 || !QUALCOSA2) {
-      return response.status(400).json({
-        message: "QUALCOSA",
-      });
-    }
+    const { category, title, cover, readTime, author, content } = request.body;
+
     const newPost = new Post({
-      QUALCOSA,
-      QUALCOSA1,
-      QUALCOSA2,
+      category,
+      title,
+      cover,
+      readTime,
+      author,
+      content,
     });
     const postSaved = await newPost.save();
     response.status(201).json(postSaved);
@@ -56,7 +55,7 @@ export async function getOne(request, response) {
     if (!post) {
       return response.status(404).json({ message: "Post non trovato" });
     }
-    response.status(200).json(author);
+    response.status(200).json(post);
   } catch (error) {
     response
       .status(500)
@@ -70,34 +69,24 @@ export async function getOne(request, response) {
 export async function put(request, response) {
   try {
     const { id } = request.params;
-    const { QUALCOSA, QUALCOSA1, QUALCOSA2 } = request.body;
-    if (!QUALCOSA || !QUALCOSA1 || !QUALCOSA2) {
-      return response.status(400).json({
-        message: "QUALCOSA",
-      });
-    }
-    const newPost = new Post({
-      QUALCOSA,
-      QUALCOSA1,
-      QUALCOSA2,
-    });
-    const updatedPost = await Post.FindByIdAndUpdate(
+    const { category, title, cover, readTime, author, content } = request.body;
+
+    const updatedPost = await Post.findByIdAndUpdate(
       id,
-      {
-        QUALCOSA,
-        QUALCOSA1,
-        QUALCOSA2,
-      },
-      { new: true }
+      { category, title, cover, readTime, author, content },
+      { new: true, runValidators: true } // runValidators verifica che venga rispettato lo schema
     );
+
     if (!updatedPost) {
       return response.status(404).json({ message: "Post non trovato" });
     }
-    response.status(200).json(updatedPost);
+
+    return response.status(200).json(updatedPost);
   } catch (error) {
-    response
-      .status(500)
-      .json({ message: "Errore nell'aggiornamento del singolo post", error });
+    return response.status(500).json({
+      message: "Errore nell'aggiornamento del singolo post",
+      error,
+    });
   }
 }
 
