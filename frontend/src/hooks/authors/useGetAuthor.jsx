@@ -1,19 +1,18 @@
 import { useState, useEffect } from "react";
-import { getSinglePost } from "../../data/post";
 
+import { getSingleAuthor } from "../../../data/author";
 
-
-function useGetPost(id) {
-  const [post, setPost] = useState(null);
+function useGetAuthor(id) {
+  const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!id) return;
-    async function fetchPost() {
+    async function fetchAuthor() {
       try {
-        const data = await getSinglePost(id);
-        setPost(data);
+        const data = await getSingleAuthor(id);
+        setAuthor(data);
       } catch (error) {
         setError("Errore nel caricamento del singolo post: ", error);
         console.log("Errore nel caricamento del singolo post: ", error.message);
@@ -21,10 +20,10 @@ function useGetPost(id) {
         setLoading(false);
       }
     }
-    fetchPost();
+    fetchAuthor();
   }, [id]);
 
-  return { post, loading, error };
+  return { author, loading, error };
 }
 
-export default useGetPost;
+export default useGetAuthor;

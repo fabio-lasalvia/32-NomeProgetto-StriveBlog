@@ -3,8 +3,10 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import MainLayout from "./components/MainLayout";
+
+import PostDetails from "./components/posts/PostDetails";
+
 import Home from "./pages/Home";
-import PostDetails from "./components/PostDetails";
 import AddPost from "./pages/AddPost";
 
 function App() {

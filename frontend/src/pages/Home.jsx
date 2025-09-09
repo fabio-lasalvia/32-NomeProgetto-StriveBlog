@@ -1,5 +1,5 @@
 import { Container, Row, Col } from "react-bootstrap";
-import AllThePosts from "../components/AllThePosts";
+import AllThePosts from "../components/posts/AllThePosts";
 
 
 function Home() {

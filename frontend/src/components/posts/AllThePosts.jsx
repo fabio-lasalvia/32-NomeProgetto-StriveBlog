@@ -1,6 +1,6 @@
 import { Row, Spinner, Alert } from "react-bootstrap";
 import SinglePost from "./SinglePost";
-import useGetPosts from "../hooks/useGetPosts";
+import useGetPosts from "../../hooks/posts/useGetPosts";
 
 function AllThePosts() {
   const { posts, loading, error } = useGetPosts();

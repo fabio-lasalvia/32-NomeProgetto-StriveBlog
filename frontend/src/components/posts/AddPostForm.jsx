@@ -1,20 +1,31 @@
 import { Form, Button, Alert, Spinner } from "react-bootstrap";
-import usePostForm from "../hooks/usePostForm";
+import usePostForm from "../../hooks/posts/usePostForm";
 
 function AddPostForm() {
   const {
-    title, setTitle,
-    category, setCategory,
-    cover, setCover,
-    readTimeValue, setReadTimeValue,
-    readTimeUnit, setReadTimeUnit,
-    author, setAuthor,
-    content, setContent,
+    title,
+    setTitle,
+    category,
+    setCategory,
+    cover,
+    setCover,
+    readTimeValue,
+    setReadTimeValue,
+    readTimeUnit,
+    setReadTimeUnit,
+    author,
+    setAuthor,
+    content,
+    setContent,
     setPostCreated,
     handleSubmit,
     loading,
-    error
+    error,
   } = usePostForm();
+
+  const addCover = (e) => {
+    setCover(e.target.files[0]);
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -44,9 +55,8 @@ function AddPostForm() {
       <Form.Group className="mb-3">
         <Form.Label>Cover URL</Form.Label>
         <Form.Control
-          type="text"
-          value={cover}
-          onChange={(e) => setCover(e.target.value)}
+          type="file"
+          onChange={(e) => setCover(e.target.files[0])}
           required
         />
       </Form.Group>

@@ -1,20 +1,17 @@
 import { Col, Card, Spinner, Alert, Button } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
 
-import useGetPost from "../hooks/useGetPost";
+import MySpinner from "../MySpinner";
+
+import useGetPost from "../../hooks/posts/useGetPost";
+import useDeletePost from "../../hooks/posts/useDeletePost";
 
 function PostDetails() {
   const { id } = useParams();
   const { post, loading, error } = useGetPost(id);
+  const { postDeleted, loading: loadingDelete, error: errorDelete, handleDelete } = useDeletePost();
 
-  if (loading) {
-    return (
-      <div className="text-center my-5">
-        <Spinner animation="border" role="status" />
-        <p>Caricamento del post...</p>
-      </div>
-    );
-  }
+  if (loading) return <MySpinner />;
 
   if (error) {
     return <Alert variant="danger">{error}</Alert>;

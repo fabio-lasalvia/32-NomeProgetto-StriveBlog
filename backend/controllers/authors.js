@@ -125,3 +125,23 @@ export async function remove(request, response) {
       .json({ message: "Errore nell'eliminazione del singolo autore", error });
   }
 }
+
+//////////////////////////////////
+///// PATCH - SINGOLO AUTORE /////
+/////////////////////////////////
+export async function addAvatar(request, response) {
+  try {
+    const filePath = request.file.path;
+    const { id } = request.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return response.status(400).json({ message: "ID non valido" });
+    }
+    const author = await Author.findByIdAndUpdate(id, {avatar:filePath}, {new: true})
+    if(!author){
+      return response.status(400)
+    }
+    return response.status(200).json(author)
+  } catch (error) {
+    next(error);
+  }
+}

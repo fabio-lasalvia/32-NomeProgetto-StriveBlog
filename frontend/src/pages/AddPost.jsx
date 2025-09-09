@@ -1,5 +1,5 @@
 import { Container, Row, Col, Card } from "react-bootstrap";
-import AddPostForm from "../components/AddPostForm";
+import AddPostForm from "../components/posts/AddPostForm";
 
 function AddPost() {
   return (

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function SinglePost({post}) {
   return (
     <>
-      <Col sm={12} md={4} lg={3}>
+      <Col sm={12} md={6} lg={6}>
         <Card style={{ cursor: "pointer" }}>
             {/* IMG POST */}
           <Card.Img

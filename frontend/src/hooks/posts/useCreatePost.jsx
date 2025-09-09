@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createPost } from "../../data/post";
+import { createPost } from "../../../data/post";
 
 function useCreatePost() {
   const [loading, setLoading] = useState(false);

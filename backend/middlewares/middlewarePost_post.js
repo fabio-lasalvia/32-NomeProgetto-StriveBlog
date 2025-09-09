@@ -1,9 +1,9 @@
 import Post from "../models/Post.js";
 
 export async function validatePost(request, response, next) {
-  const { category, title, cover, readTime, author, content } = request.body;
+  const { category, title, readTime, author, content } = request.body;
   const { id } = request.params;
-  if (!category || !title || !cover || !readTime || !author || !content) {
+  if (!category || !title || !readTime || !author || !content) {
     return response.status(400).json({
       message: "I campi elencati sono obbligatori",
     });

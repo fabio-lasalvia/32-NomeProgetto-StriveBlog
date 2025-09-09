@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAll } from "../../data/post";
+import { getAllPosts } from "../../../data/post";
 
 function useGetPosts() {
   const [posts, setPosts] = useState([]);
@@ -8,12 +8,14 @@ function useGetPosts() {
 
   useEffect(() => {
     async function fetchPosts() {
+      setLoading(true);
+      setError(null);
       try {
-        const data = await getAll();
+        const data = await getAllPosts();
         setPosts(data);
       } catch (error) {
-        setError("Errore nel caricamento di tutti i post: ", error);
-        console.log("Errore nel caricamento di tutti i post: ", error.message);
+        setError(`Errore nel caricamento di tutti i post: ${error}`);
+        console.log("Errore nel caricamento di tutti i post:", error.message);
       } finally {
         setLoading(false);
       }

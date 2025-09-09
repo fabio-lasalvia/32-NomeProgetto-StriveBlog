@@ -4,7 +4,7 @@ import useCreatePost from "./useCreatePost";
 function usePostForm() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
-  const [cover, setCover] = useState("");
+  const [cover, setCover] = useState(null);
   const [readTimeValue, setReadTimeValue] = useState(5);
   const [readTimeUnit, setReadTimeUnit] = useState("minute");
   const [author, setAuthor] = useState("");
@@ -16,29 +16,28 @@ function usePostForm() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const newPost = {
-      title,
-      category,
-      cover,
-      readTime: { value: Number(readTimeValue), unit: readTimeUnit },
-      author,
-      content,
-    };
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("category", category);
+    formData.append("cover", cover);
+    formData.append("readTime[value]", Number(readTimeValue));
+    formData.append("readTime[unit]", readTimeUnit);
+    formData.append("author", author);
+    formData.append("content", content);
 
-    const result = await createNewPost(newPost);
+    const result = await createNewPost(formData);
 
     if (result) {
       setPostCreated("Post creato con successo!");
       // Reset del form
       setTitle("");
       setCategory("");
-      setCover("");
+      setCover(null);
       setReadTimeValue(5);
       setReadTimeUnit("minute");
       setAuthor("");
       setContent("");
 
-      //Nasconde il messaggio dopo 3 secondi
       setTimeout(() => setPostCreated(null), 3000);
     } else {
       setPostCreated("Errore nella creazione del post");
