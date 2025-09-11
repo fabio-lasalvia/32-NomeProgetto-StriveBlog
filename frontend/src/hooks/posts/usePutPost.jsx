@@ -12,7 +12,8 @@ function usePutAuthor() {
       const data = await updateAuthor(id);
       setPostUpdated(data);
     } catch (error) {
-      setError("Errore nell'aggiornamento dell'autore: ", error);
+      setError("Errore nell'aggiornamento del singolo post: ", error);
+      console.log("Errore nell'aggiornamento del singolo post: ", error.message);
     } finally {
       setLoading(false);
     }

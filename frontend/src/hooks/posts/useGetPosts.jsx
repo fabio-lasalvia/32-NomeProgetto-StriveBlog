@@ -15,7 +15,7 @@ function useGetPosts() {
         setPosts(data);
       } catch (error) {
         setError(`Errore nel caricamento di tutti i post: ${error}`);
-        console.log("Errore nel caricamento di tutti i post:", error.message);
+        console.log("Errore nel caricamento di tutti i post: ", error.message);
       } finally {
         setLoading(false);
       }

@@ -13,7 +13,7 @@ function useCreatePost() {
       const data = await createPost(newPost);
       return data;
     } catch (error) {
-      setError("Errore nella creazione del post: ", error);
+      setError(`Errore nella creazione del post: ${error}`);
       console.log("Errore nella creazione del post: ", error.message);
     } finally {
       setLoading(false);

@@ -15,7 +15,8 @@ function usePatchPost() {
       setUpdatedPost(post);
       return post;
     } catch (error) {
-      setError(error.message || "Errore durante l’aggiornamento");
+      setError(error.message || "Errore durante l'aggiornamento");
+      console.log("Errore nell'aggiornamento del singolo elemento del post: ", error.message);
     } finally {
       setLoading(false);
     }

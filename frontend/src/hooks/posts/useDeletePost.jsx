@@ -16,7 +16,8 @@ function useDeletePost() {
       const data = await deletePost(id);
       setPostDeleted(data);
     } catch (error) {
-      setError("Errore nell'eliminazione del post: ", error);
+      setError(`Errore nell'eliminazione del post: ${error}`);
+      console.log("Errore nell'eliminazione del post: ", error.message);
     } finally {
       setLoading(false);
     }

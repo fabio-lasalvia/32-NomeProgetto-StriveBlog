@@ -13,7 +13,7 @@ function useGetPost(id) {
         const data = await getSinglePost(id);
         setPost(data);
       } catch (error) {
-        setError("Errore nel caricamento del singolo post: ", error);
+        setError(`Errore nel caricamento del singolo post: ${error}`);
         console.log("Errore nel caricamento del singolo post: ", error.message);
       } finally {
         setLoading(false);
