@@ -18,14 +18,14 @@ export async function getAll(request, response) {
 /////////////////////////////////////
 export async function create(request, response) {
   try {
-    const { category, title, cover, readTime, author, content } = request.body;
+    const { category, title, cover, readTime, content } = request.body;
 
     const newPost = new Post({
       category,
       title,
       cover,
       readTime,
-      author,
+      author : request.author._id,
       content,
     });
     const postSaved = await newPost.save();
@@ -65,11 +65,11 @@ export async function getOne(request, response) {
 export async function put(request, response) {
   try {
     const { id } = request.params;
-    const { category, title, cover, readTime, author, content } = request.body;
+    const { category, title, cover, readTime, content } = request.body;
 
     const updatedPost = await Post.findByIdAndUpdate(
       id,
-      { category, title, cover, readTime, author, content },
+      { category, title, cover, readTime, author: request.author.__id, content },
       { new: true, runValidators: true } // runValidators verifica che venga rispettato lo schema
     );
 

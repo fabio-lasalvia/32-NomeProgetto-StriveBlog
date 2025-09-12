@@ -20,7 +20,7 @@ export async function getAll(request, response) {
 /////////////////////////////////////////
 export async function create(request, response) {
   try {
-    const { nome, cognome, email, dataDiNascita, avatar } = request.body;
+    const { name, surname, email, dateOfBirth, avatar, password } = request.body;
     if (!nome || !cognome || !email || !dataDiNascita) {
       return response.status(400).json({
         message:

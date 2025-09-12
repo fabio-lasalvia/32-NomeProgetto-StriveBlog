@@ -1,25 +1,28 @@
-import createHttpError from "http-errors";
-import errorHandler from "./errorHandler.js";
 import { verifyJWT } from "../helpers/jwt.js";
 import Author from "../models/Author.js";
 
-async function authentication(request, response, next) {
-  if (!request.headers.authorization)
-    return next(createHttpError.Unauthorized());
+export async function authentication(request, response, next) {
+  const headerAuth = request.headers.authorization || "";
 
-  const parts = request.headers.authorization.split(" ");
-  if (parts.length != 2) return next(createHttpError.Unauthorized());
-  if (parts[0] != "Bearer") return next(createHttpError.Unauthorized());
+  const token = headerAuth.replace("Bearer ", "");
 
-  const jwtToken = parts[1];
+  if (!token) {
+    return response.status(401).json({ message: "Token mancante" });
+  }
 
   try {
-    const payload = await verifyJWT(jwtToken);
-    const authUser = await Author.findById(payload.userId);
-    if (!authUser) throw new Error("No user");
+    const payload = verifyJWT(token);
+
+    const author = await Author.findById(payload.id);
+
+    if (!author) {
+      return response.status(401).json({ message: "Utente non verificato" });
+    }
+
+    request.author = author;
+
+    next();
   } catch (error) {
-    next(createHttpError.Unauthorized());
+    return response.status(401).json({ message: "Token scaduto o non valido" });
   }
 }
-
-export default authentication;

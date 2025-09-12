@@ -23,7 +23,7 @@ export async function getAllComments(request, response) {
 ///// POST - SINGOLO COMMENTO/////
 //////////////////////////////////
 export async function createComment(request, response) {
-  const { text, author } = request.body;
+  const { text } = request.body;
   const { id } = request.params;
   if (!mongoose.Types.ObjectId.isValid(author)) {
     return response.status(400).json({ message: "Author con id non valido" });
@@ -39,10 +39,10 @@ export async function createComment(request, response) {
 
   const post = await Post.findById(id);
   if (!post) {
-    return response.status(404).json({ message: "Post non trovato" });
+    return response.status(404).json({ message: "Post non trovato" }); 
   }
 
-  const newComment = { text, author };
+  const newComment = { text, author: request.author._id };
   post.comments.push(newComment);
   await post.save();
 
