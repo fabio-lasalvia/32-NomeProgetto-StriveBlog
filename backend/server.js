@@ -8,10 +8,14 @@ import { authentication } from "./middlewares/authentication.js";
 
 import { connectDB } from "./db.js";
 
+import googleStrategy from "./config/passport.config.js";
+
 import authRouter from "./routes/auth.js";
 import authorsRouter from "./routes/authors.js";
 import postsRouter from "./routes/posts.js";
 import commentsRouter from "./routes/comments.js";
+import passport from "passport";
+
 
 
 
@@ -23,6 +27,8 @@ server.use(cors());
 server.use(morgan("tiny"));
 server.use(express.json());
 server.use(errorHandler);
+
+passport.use(googleStrategy)
 
 server.use('/auth', authRouter)
 server.use("/authors", authentication, authorsRouter);

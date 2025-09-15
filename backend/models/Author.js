@@ -9,19 +9,18 @@ const AuthorSchema = new Schema({
 
   email: { type: String, required: true, unique: true, trim: true, lowercase: true, validate: [validator.isEmail, "Inserisci un'email valida"] },
 
-  dateOfBirth: { type: String, required: true },
+  dateOfBirth: { type: String},
 
   avatar: { type: String },
 
-  password: { type: String, required: true, minlength: 6 },
+  password: { type: String, minlength: 6 },
+
+  googleId: { type: String, unique: true },
 
 });
 
 AuthorSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-
+  if (!this.isModified("password") || !this.password) return next();
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
