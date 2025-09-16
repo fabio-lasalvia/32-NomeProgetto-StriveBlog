@@ -4,7 +4,7 @@ import cors from "cors"; //permette di gestire il CORS (chiamate da frontend su 
 import morgan from "morgan";
 
 import errorHandler from "./middlewares/errorHandler.js";
-import { authentication } from "./middlewares/authentication.js";
+import { authentication } from "./middlewares/auth/authentication.js";
 
 import { connectDB } from "./db.js";
 

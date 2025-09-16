@@ -3,9 +3,9 @@ import validator from "validator";
 import bcrypt from 'bcrypt'
 
 const AuthorSchema = new Schema({
-  name: { type: String, required: true, trim: true, minlength: 2, maxlength: 15 },
+  name: { type: String, required: true, trim: true, minlength: 2, maxlength: 50 },
 
-  surname: { type: String, required: true, trim: true, minlength: 2, maxlength: 15 },
+  surname: { type: String, trim: true, maxlength: 50 },
 
   email: { type: String, required: true, unique: true, trim: true, lowercase: true, validate: [validator.isEmail, "Inserisci un'email valida"] },
 
@@ -16,6 +16,8 @@ const AuthorSchema = new Schema({
   password: { type: String, minlength: 6 },
 
   googleId: { type: String },
+
+  OTP: {type: String},
 
 });
 

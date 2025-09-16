@@ -1,5 +1,5 @@
-import { verifyJWT } from "../helpers/jwt.js";
-import Author from "../models/Author.js";
+import { verifyJWT } from "../../helpers/jwt.js";
+import Author from "../../models/Author.js";
 
 export async function authentication(request, response, next) {
   const headerAuth = request.headers.authorization || "";
