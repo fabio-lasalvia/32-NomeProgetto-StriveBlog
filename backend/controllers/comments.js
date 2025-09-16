@@ -77,11 +77,12 @@ export async function getSingleComment(request, response) {
 export async function updateComment(request, response) {
   const { id, commentId } = request.params;
   const { text, author } = request.body;
+
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return response.status(400).json({ message: "ID non valido" });
+    return response.status(400).json({ message: "ID post non valido" });
   }
   if (!mongoose.Types.ObjectId.isValid(commentId)) {
-    return response.status(400).json({ message: "ID non valido" });
+    return response.status(400).json({ message: "ID commento non valido" });
   }
   if (!mongoose.Types.ObjectId.isValid(author)) {
     return response.status(400).json({ message: "Autore non valido" });
@@ -97,36 +98,17 @@ export async function updateComment(request, response) {
     return response.status(404).json({ message: "Post non trovato" });
   }
 
-//   let comment = post.comments.find((comment) => comment._id == commentId);
-//   if (!comment) {
-//     return response.status(404).json({ message: "Commento non trovato" });
-//   }
-
-//   comment = {
-//      commentId,
-//      text,
-//      author,
-//    };
-// console.log(comment)
-   //await post.save();
-
-   const commentIndex = post.comments.findIndex(comment => comment._id == commentId)
-
-   if(commentIndex === -1){
+  const commentIndex = post.comments.findIndex(comment => comment._id.equals(commentId));
+  if (commentIndex === -1) {
     return response.status(404).json({ message: "Commento non trovato" });
-   }
+  }
 
-   post.comments[commentIndex] = {
-    ...post.comments[commentIndex],
-    text,
-    author
-   }
+  if (text) post.comments[commentIndex].text = text;
+  if (author) post.comments[commentIndex].author = mongoose.Types.ObjectId(author);
 
-   await post.save();
+  await post.save();
 
-
-
-  response.status(200).json(post.comments[commentIndex]);
+  return response.status(200).json({ message: "Commento aggiornato", comment: post.comments[commentIndex] });
 }
 
 ////////////////////////////////////

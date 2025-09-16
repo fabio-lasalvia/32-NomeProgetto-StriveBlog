@@ -1,23 +1,58 @@
 import { signJWT } from "../helpers/jwt.js"
 import Author from "../models/Author.js"
 
+/////////////////
+///// LOGIN /////
+/////////////////
 export async function login(request, response, next) {
-    const { email, password } = request.body
+    try {
+        const { email, password } = request.body
 
-    const userEmail = Author.findOne({ email })
+        const userEmail = await Author.findOne({ email })
 
-    if (!email) {
-        response.status(404).json("Autore non trovato")
-    }
+        if (!userEmail) {
+            return response.status(404).json({ message: "Autore non trovato" })
+        }
 
-    if (userEmail) {
-        if (userEmail.comparePassword(password)) {
+        const isMatch = await userEmail.comparePassword(password)
+        if (isMatch) {
             const jwt = await signJWT({
                 id: userEmail._id
             })
-            return response.status(200).json({message: "token generato con successo"}, jwt)
+            return response.status(200).json({ message: "token generato con successo", token: jwt })
         }
-    }
 
-    return response.status(400).json({ message: "Email o password errati" })
+        return response.status(400).json({ message: "Email o password errati" })
+    } catch (error) {
+        next(error)
+    }
+}
+
+//////////////////
+///// SIGNUP /////
+//////////////////
+export async function signup(request, response) {
+    try {
+        const { name, surname, email, password, dateOfBirth, avatar } = request.body
+
+        const existing = await Author.findOne({ email })
+        if (existing) {
+            return response.status(400).json({ message: "Email già registrata" })
+        }
+
+        const newAuthor = new Author({
+            name,
+            surname,
+            email,
+            password,
+            dateOfBirth,
+            avatar
+        })
+
+        await newAuthor.save()
+
+        response.status(201).json({ message: "Autore creato con successo", author: newAuthor })
+    } catch (error) {
+        response.status(500).json({ message: "Errore durante la registrazione", error })
+    }
 }

@@ -1,11 +1,14 @@
 import express from "express";
 
-import { login } from "../controllers/auth.js";
+import { login, signup } from "../controllers/auth.js";
 import passport from "passport";
 
 const authRouter = express.Router();
 
-authRouter.post("/register", login);
+
+authRouter.post("/signup", signup)
+
+authRouter.post("/login", login);
 
 authRouter.get('/login-google', passport.authenticate('google', { scope: ['profile', 'email'] }))
 

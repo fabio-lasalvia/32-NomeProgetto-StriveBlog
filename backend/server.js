@@ -17,9 +17,6 @@ import commentsRouter from "./routes/comments.js";
 import passport from "passport";
 
 
-
-
-
 const server = express();
 const port = process.env.PORT;
 

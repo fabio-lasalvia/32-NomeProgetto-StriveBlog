@@ -9,13 +9,13 @@ const AuthorSchema = new Schema({
 
   email: { type: String, required: true, unique: true, trim: true, lowercase: true, validate: [validator.isEmail, "Inserisci un'email valida"] },
 
-  dateOfBirth: { type: String},
+  dateOfBirth: { type: String },
 
   avatar: { type: String },
 
   password: { type: String, minlength: 6 },
 
-  googleId: { type: String, unique: true },
+  googleId: { type: String },
 
 });
 

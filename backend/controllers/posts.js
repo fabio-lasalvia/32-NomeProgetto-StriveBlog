@@ -4,7 +4,7 @@ import Post from "../models/Post.js";
 //////////////////////////////
 ///// GET - TUTTI I POST /////
 //////////////////////////////
-export async function getAll(request, response) {
+export async function getAll(request, response, next) {
   try {
     const posts = await Post.find();
     response.status(200).json(posts);
@@ -16,7 +16,7 @@ export async function getAll(request, response) {
 /////////////////////////////////////
 ///// POST - CREAZIONE DEI POST /////
 /////////////////////////////////////
-export async function create(request, response) {
+export async function create(request, response, next) {
   try {
     const { category, title, cover, readTime, content } = request.body;
 
@@ -25,35 +25,27 @@ export async function create(request, response) {
       title,
       cover,
       readTime,
-      author : request.author._id,
+      author: request.author._id,
       content,
     });
+
     const postSaved = await newPost.save();
     response.status(201).json(postSaved);
   } catch (error) {
     if (error.code === 11000) {
-      return response.status(400).json({ message: "Email già esistente" });
+      return response.status(400).json({ message: "Duplicate field error" });
     }
-    response
-      .status(500)
-      .json({ message: "Errore nella creazione dell'autore", error });
+    response.status(500).json({ message: "Error creating post", error });
   }
 }
+
 
 //////////////////////////////
 ///// GET - SINGOLO POST /////
 //////////////////////////////
-export async function getOne(request, response) {
+export async function getOne(request, response, next) {
   try {
-    const { id } = request.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return response.status(400).json({ message: "ID non valido" });
-    }
-    const post = await Post.findById(id);
-    if (!post) {
-      return response.status(404).json({ message: "Post non trovato" });
-    }
-    response.status(200).json(post);
+    response.status(200).json(request.post);
   } catch (error) {
     next(error);
   }
@@ -62,22 +54,19 @@ export async function getOne(request, response) {
 //////////////////////////////
 ///// PUT - SINGOLO POST /////
 //////////////////////////////
-export async function put(request, response) {
+export async function put(request, response, next) {
   try {
-    const { id } = request.params;
     const { category, title, cover, readTime, content } = request.body;
+    const post = request.post;
 
-    const updatedPost = await Post.findByIdAndUpdate(
-      id,
-      { category, title, cover, readTime, author: request.author.__id, content },
-      { new: true, runValidators: true } // runValidators verifica che venga rispettato lo schema
-    );
+    post.category = category;
+    post.title = title;
+    post.cover = cover;
+    post.readTime = readTime;
+    post.content = content;
 
-    if (!updatedPost) {
-      return response.status(404).json({ message: "Post non trovato" });
-    }
-
-    return response.status(200).json(updatedPost);
+    await post.save();
+    response.status(200).json(post);
   } catch (error) {
     next(error);
   }
@@ -86,17 +75,11 @@ export async function put(request, response) {
 /////////////////////////////////
 ///// DELETE - SINGOLO POST /////
 /////////////////////////////////
-export async function remove(request, response) {
+export async function remove(request, response, next) {
   try {
-    const { id } = request.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return response.status(400).json({ message: "ID non valido" });
-    }
-    const deletedPost = await Post.findByIdAndDelete(id);
-    if (!deletedPost) {
-      return response.status(404).json({ message: "Post non trovato" });
-    }
-    response.status(200).json(deletedPost);
+    const post = request.post;
+    await post.deleteOne();
+    response.status(200).json(post);
   } catch (error) {
     next(error);
   }
@@ -105,22 +88,12 @@ export async function remove(request, response) {
 ////////////////////////////////
 ///// PATCH - SINGOLO POST /////
 ////////////////////////////////
-export async function addCover(request, response) {
+export async function addCover(request, response, next) {
   try {
-    const filePath = request.file.path;
-    const { id } = request.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return response.status(400).json({ message: "ID non valido" });
-    }
-    const post = await Post.findByIdAndUpdate(
-      id,
-      { cover: filePath },
-      { new: true }
-    );
-    if (!post) {
-      return response.status(404).json({ message: "Post non trovato" });
-    }
-    return response.status(200).json(post);
+    const post = request.post;
+    post.cover = request.file.path;
+    await post.save();
+    response.status(200).json(post);
   } catch (error) {
     next(error);
   }

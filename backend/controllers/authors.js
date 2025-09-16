@@ -21,18 +21,19 @@ export async function getAll(request, response) {
 export async function create(request, response) {
   try {
     const { name, surname, email, dateOfBirth, avatar, password } = request.body;
-    if (!nome || !cognome || !email || !dataDiNascita) {
+    if (!name || !surname || !email || !dateOfBirth) {
       return response.status(400).json({
         message:
           "I campi nome, cognome, email e data di nascita sono obbligatori",
       });
     }
     const newAuthor = new Author({
-      nome,
-      cognome,
+      name,
+      surname,
       email,
-      dataDiNascita,
+      dateOfBirth,
       avatar,
+      password: password || undefined,
     });
     const authorSaved = await newAuthor.save();
     response.status(201).json(authorSaved);
@@ -136,8 +137,8 @@ export async function addAvatar(request, response) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return response.status(400).json({ message: "ID non valido" });
     }
-    const author = await Author.findByIdAndUpdate(id, {avatar:filePath}, {new: true})
-    if(!author){
+    const author = await Author.findByIdAndUpdate(id, { avatar: filePath }, { new: true })
+    if (!author) {
       return response.status(400)
     }
     return response.status(200).json(author)
