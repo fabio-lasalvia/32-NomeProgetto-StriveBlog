@@ -17,7 +17,7 @@ const googleStrategy = new GoogleStrategy(
     async function (accessToken, refreshToken, profile, callback) {
         try {
             let author = await Author.findOne({ googleId: profile.id })
-console.log(profile)
+            console.log(profile)
             if (!author) {
                 author = await Author.create({
                     name: profile.name?.givenName || profile.displayName,

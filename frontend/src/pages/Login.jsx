@@ -53,7 +53,7 @@ function Login() {
 
               <Button
                 variant="outline-dark"
-                className="w-100 d-flex align-items-center justify-content-center gap-2"
+                className="w-100 d-flex align-items-center justify-content-center gap-2 mb-3"
                 onClick={googleLogin}
               >
                 <img
@@ -62,6 +62,11 @@ function Login() {
                   style={{ maxWidth: 24 }}
                 />
                 Login with Google
+              </Button>
+
+              <Button variant="secondary" className="w-100 mb-3" onClick={() => navigate("/")}>
+                <i className="bi bi-arrow-left me-2"></i>
+                Back
               </Button>
             </Form>
           </Card>

@@ -9,7 +9,7 @@ function AllThePosts() {
     return (
       <div className="text-center my-5">
         <Spinner animation="border" role="status" />
-        <p>Caricamento in corso...</p>
+        <p>Loading...</p>
       </div>
     );
   }
@@ -25,7 +25,7 @@ function AllThePosts() {
         {posts && posts.length > 0 ? (
           posts.map((post) => <SinglePost key={post._id} post={post} />)
         ) : (
-          <p className="text-center">Nessun post disponibile</p>
+          <p className="text-center">No posts available</p>
         )}
         {console.log(posts)}
       </Row>

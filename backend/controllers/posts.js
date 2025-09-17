@@ -6,7 +6,7 @@ import Post from "../models/Post.js";
 //////////////////////////////
 export async function getAll(request, response, next) {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().populate("author", "name email avatar");
     response.status(200).json(posts);
   } catch (error) {
     next(error);
@@ -18,7 +18,13 @@ export async function getAll(request, response, next) {
 /////////////////////////////////////
 export async function create(request, response, next) {
   try {
-    const { category, title, cover, readTime, content } = request.body;
+    const { category, title, readTime, content } = request.body;
+
+    if (!request.author) {
+      return response.status(401).json({ message: "Autenticazione mancante" });
+    }
+
+    const cover = request.file ? request.file.path : undefined;
 
     const newPost = new Post({
       category,
@@ -39,13 +45,16 @@ export async function create(request, response, next) {
   }
 }
 
-
 //////////////////////////////
 ///// GET - SINGOLO POST /////
 //////////////////////////////
 export async function getOne(request, response, next) {
   try {
-    response.status(200).json(request.post);
+    const post = await Post.findById(request.post._id).populate(
+      "author",
+      "name email avatar"
+    );
+    response.status(200).json(post);
   } catch (error) {
     next(error);
   }

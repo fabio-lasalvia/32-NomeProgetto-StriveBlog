@@ -29,7 +29,7 @@ passport.use(googleStrategy)
 
 server.use('/auth', authRouter)
 server.use("/authors", authentication, authorsRouter);
-server.use("/posts", authentication, postsRouter);
+server.use("/posts", postsRouter);
 server.use("/posts", authentication, commentsRouter)
 
 connectDB();

@@ -18,7 +18,7 @@ function PostDetails() {
   }
 
   if (!post) {
-    return <p className="text-center">Post non trovato</p>;
+    return <p className="text-center">Post not found</p>;
   }
 
   return (
@@ -35,7 +35,7 @@ function PostDetails() {
 
           <Card.Body className="d-flex flex-column">
             {/* TITOLO POST */}
-            <Card.Title title={post.title} className="text-truncate">
+            <Card.Title title={post.title} className="text-center">
               {post.title}
             </Card.Title>
 
@@ -46,7 +46,7 @@ function PostDetails() {
 
             {/* AUTORE POST */}
             <Card.Text className="text-center fst-italic fw-semibold text-black">
-              {post.author}
+              {post.author?.name || post.author?.email || post.author || "Unknown author"}
             </Card.Text>
 
             {/* CATEGORIA POST */}

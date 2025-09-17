@@ -81,16 +81,6 @@ function AddPostForm() {
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label>Autore</Form.Label>
-        <Form.Control
-          type="text"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-          required
-        />
-      </Form.Group>
-
-      <Form.Group className="mb-3">
         <Form.Label>Contenuto</Form.Label>
         <Form.Control
           as="textarea"

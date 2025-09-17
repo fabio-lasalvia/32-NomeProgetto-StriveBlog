@@ -57,15 +57,23 @@ export async function signup(request, response) {
 
     await mailer.sendMail({
       to: email,
-      subject: "Welcome to StriveBlog",
+      subject: "Welcome to StriveBlog!",
       html: `
-            <h1>Welcome to StriveBlog</h1>
+    <h1>Welcome to StriveBlog!</h1>
 
-            <p>Ciao ${name} ${surname}, ti diamo il benvenuto su StriveBlog</p>
-            `,
+    <p>Hi ${name} ${surname},</p>
 
+    <p>Thank you for joining StriveBlog! We're excited to have you on board. 
+    Explore, share, and connect with our community of passionate bloggers.</p>
+
+    <p>To get started, you can visit your <a href="https://striveblog.com/profile">profile</a> or check out the latest posts on our homepage.</p>
+
+    <p>Happy blogging!<br/>
+    The StriveBlog Team</p>
+  `,
       from: "studio.fabio.lasalvia@gmail.com",
     });
+
 
     response
       .status(201)

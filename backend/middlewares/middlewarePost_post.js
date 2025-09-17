@@ -1,28 +1,30 @@
 import Post from "../models/Post.js";
 
 export async function validatePost(request, response, next) {
-  const { category, title, readTime, author, content } = request.body;
+  const { category, title, readTime, content } = request.body;
   const { id } = request.params;
-  if (!category || !title || !readTime || !author || !content) {
+
+  const missingFields = [];
+  if (!category) missingFields.push("category");
+  if (!title) missingFields.push("title");
+  if (!readTime || !readTime.value) missingFields.push("readTime.value");
+  if (!content) missingFields.push("content");
+  if (!request.author) missingFields.push("author (authentication missing)");
+
+  if (missingFields.length > 0) {
     return response.status(400).json({
-      message: "I campi elencati sono obbligatori",
+      message: "I seguenti campi obbligatori sono mancanti",
+      missingFields,
     });
   }
 
-  const filter = { $and: [{ title }] };
+  // Controllo unicità del titolo
+  const filter = { title };
+  if (id) filter._id = { $ne: id }; // se è una PUT va escluso il post stesso
 
-  if (id) {
-    //Stiamo eseguendo una Put
-    filter.$and.push({ _id: { $ne: id } });
-  }
-  console.log(id);
-  console.log(filter);
+  const existingPosts = await Post.find(filter);
 
-
-  const Posts = await Post.find(filter);
-  console.log(Posts);
-
-  if (Posts.length > 0) {
+  if (existingPosts.length > 0) {
     return response
       .status(400)
       .json({ message: "Il titolo non può essere identico ad un altro post" });

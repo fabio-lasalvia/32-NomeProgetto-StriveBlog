@@ -1,23 +1,33 @@
 import express from "express";
 import { create, getOne, getAll, put, remove, addCover } from "../controllers/posts.js";
 
-import { validatePost } from "../middlewares/middlewarePost_post.js";
 import { validateId } from "../middlewares/middlewareId.js";
 
 import uploadCloudinary from "../middlewares/uploadCloudinary.js";
+import { authentication } from "../middlewares/auth/authentication.js";
+
+import { validatePostId } from "../middlewares/posts/validatePostId.js";
+import { validatePost } from "../middlewares/middlewarePost_post.js";
 
 const postsRouter = express.Router();
 
+///////////////////////////
+///// Rotte Pubbliche /////
+///////////////////////////
 postsRouter.get("/", getAll);
 
-postsRouter.post("/", validatePost, create);
+postsRouter.get("/:id", validatePostId, getOne);
 
-postsRouter.get("/:id", validateId, getOne);
 
-postsRouter.put("/:id", validateId, validatePost, put);
+//////////////////////////
+///// Rotte Protette /////
+//////////////////////////
+postsRouter.post("/", authentication, uploadCloudinary.single("cover"), validatePost, create);
 
-postsRouter.patch("/:id/cover", validateId, uploadCloudinary.single("cover"), addCover);
+postsRouter.put("/:id", authentication, validatePostId, validatePost, put);
 
-postsRouter.delete("/:id", validateId, remove);
+postsRouter.patch("/:id/cover", authentication, validatePostId, uploadCloudinary.single("cover"), addCover);
+
+postsRouter.delete("/:id", authentication, validatePostId, remove);
 
 export default postsRouter;

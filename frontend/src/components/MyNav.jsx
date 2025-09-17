@@ -7,9 +7,12 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function MyNav() {
+
+  const navigate = useNavigate()
+
   return (
     <Navbar bg="dark" variant="dark" expand="md" className="py-2">
       <Container fluid className="align-items-center">
@@ -64,6 +67,7 @@ function MyNav() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
+              <Dropdown.Item onClick={() => navigate("/login")}>Login</Dropdown.Item>
               <Dropdown.Item>Impostazioni</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item className="text-danger">Esci</Dropdown.Item>
