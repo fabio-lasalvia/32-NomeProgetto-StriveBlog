@@ -2,6 +2,7 @@ import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import "../../CSS/LoginStyle.css";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import useToggleTema from "../hooks/common/useToggleTema";
 
 function Login() {
   const googleLogin = () => {
@@ -20,6 +21,8 @@ function Login() {
       navigate("/");
     }
   }, []);
+
+  const { tema } = useToggleTema();
 
   return (
     <div className="bgColor p-0 m-0">
@@ -47,12 +50,15 @@ function Login() {
                 <Form.Control type="password" placeholder="Password" />
               </Form.Group>
 
-              <Button variant="primary" className="w-100 mb-3">
+              <Button
+                variant={tema === "data-bs-theme-light" ? "primary" : "outline-primary"}
+                className="w-100 mb-3"
+              >
                 Login
               </Button>
 
               <Button
-                variant="outline-dark"
+                variant={tema === "data-bs-theme-light" ? "light" : "dark"}
                 className="w-100 d-flex align-items-center justify-content-center gap-2 mb-3"
                 onClick={googleLogin}
               >
@@ -64,7 +70,11 @@ function Login() {
                 Login with Google
               </Button>
 
-              <Button variant="secondary" className="w-100 mb-3" onClick={() => navigate("/")}>
+              <Button
+                variant={tema === "data-bs-theme-light" ? "secondary" : "outline-secondary"}
+                className="w-100 mb-3"
+                onClick={() => navigate("/")}
+              >
                 <i className="bi bi-arrow-left me-2"></i>
                 Back
               </Button>

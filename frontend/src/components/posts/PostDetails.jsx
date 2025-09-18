@@ -1,5 +1,5 @@
-import { Col, Card, Spinner, Alert, Button } from "react-bootstrap";
-import { useParams, Link } from "react-router-dom";
+import { Col, Card, Spinner, Alert, Button, Row } from "react-bootstrap";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 import MySpinner from "../MySpinner";
 
@@ -10,6 +10,7 @@ function PostDetails() {
   const { id } = useParams();
   const { post, loading, error } = useGetPost(id);
   const { postDeleted, loading: loadingDelete, error: errorDelete, handleDelete } = useDeletePost();
+  const navigate = useNavigate()
 
   if (loading) return <MySpinner />;
 
@@ -24,6 +25,10 @@ function PostDetails() {
   return (
     <>
       <Col sm={12} md={12} lg={12} className="mx-auto my-4">
+        <Button className="mb-2" onClick={() => navigate("/")}>
+          <i className="bi bi-arrow-left me-2"></i>
+          Back
+        </Button>
         <Card style={{ cursor: "pointer" }}>
           {/* IMG POST */}
           <Card.Img
@@ -34,23 +39,24 @@ function PostDetails() {
           />
 
           <Card.Body className="d-flex flex-column">
+            
             {/* TITOLO POST */}
             <Card.Title title={post.title} className="text-center">
               {post.title}
             </Card.Title>
 
             {/* CONTENUTO POST */}
-            <Card.Text className="text-center fst-italic fw-semibold text-primary">
+            <Card.Text className="fst-italic fw-semibold text-primary">
               {post.content}
             </Card.Text>
 
             {/* AUTORE POST */}
-            <Card.Text className="text-center fst-italic fw-semibold text-black">
+            <Card.Text className="text-center fst-italic fw-semibold">
               {post.author?.name || post.author?.email || post.author || "Unknown author"}
             </Card.Text>
 
             {/* CATEGORIA POST */}
-            <Card.Text className="text-center fst-italic fw-semibold text-black">
+            <Card.Text className="text-center fst-italic fw-semibold">
               {post.category}
             </Card.Text>
 
@@ -61,7 +67,7 @@ function PostDetails() {
             </Button>
 
             {/* BTN ELIMINA */}
-            <Button variant="danger">
+            <Button variant="danger" onClick={()=>handleDelete}>
               <i className="bi bi-trash me-2"></i>
               Delete
             </Button>

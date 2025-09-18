@@ -7,6 +7,7 @@ function SinglePost({ post }) {
     <>
       <Col sm={12} md={6} lg={6}>
         <Card style={{ cursor: "pointer" }}>
+          
           {/* IMG POST */}
           <Card.Img
             src={post.cover}
@@ -18,22 +19,27 @@ function SinglePost({ post }) {
             }}
           />
           <Card.Body className="d-flex flex-column">
+
             {/* TITOLO POST */}
             <Card.Title title={post.title} className="text-center text-truncate">
               {post.title}
             </Card.Title>
+
             {/* CONTENUTO POST */}
-            <Card.Text className="text-center fst-italic fw-semibold text-primary text-truncate" style={{ maxHeight: "100 px" }} title={post.content}>
+            <Card.Text className="fst-italic fw-semibold text-primary text-truncate" title={post.content}>
               {post.content}
             </Card.Text>
+
             {/* AUTORE POST */}
-            <Card.Text className="text-center fst-italic fw-semibold text-black">
+            <Card.Text className="text-center fst-italic fw-semibold">
               {post.author?.name || post.author?.email || post.author || "Unknown author"}
             </Card.Text>
+
             {/* CATEGORIA POST */}
-            <Card.Text className="text-center fst-italic fw-semibold text-black" title={post.category}>
+            <Card.Text className="text-center fst-italic fw-semibold" title={post.category}>
               {post.category}
             </Card.Text>
+
             {/* LINK DETTAGLI */}
             <Link
               to={`/posts/${post._id}`}

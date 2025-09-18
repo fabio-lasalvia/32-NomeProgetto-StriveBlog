@@ -1,0 +1,19 @@
+body {
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+[data-bs-theme="dark"] {
+    --bs-body-bg: #121212;
+    --bs-body-color: #eee;
+}
+
+[data-bs-theme="dark"] .form-control {
+    background-color: #333;
+    color: #fff;
+    border-color: #555;
+}
+
+[data-bs-theme="dark"] .btn-light {
+    background-color: #444;
+    color: #fff;
+}

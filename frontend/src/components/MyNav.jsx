@@ -7,14 +7,23 @@ import {
   Form,
   Button,
 } from "react-bootstrap";
+
 import { NavLink, useNavigate } from "react-router-dom";
+import useToggleTema from "../hooks/common/useToggleTema";
 
 function MyNav() {
 
   const navigate = useNavigate()
 
+  const { tema, changeTema } = useToggleTema()
+
   return (
-    <Navbar bg="dark" variant="dark" expand="md" className="py-2">
+    <Navbar
+      expand="md"
+      className="py-2"
+      bg={tema === "data-bs-theme-light" ? "light" : "dark"}
+      variant={tema === "data-bs-theme-light" ? "light" : "dark"}
+    >
       <Container fluid className="align-items-center">
         {/* SINISTRA: LOGO */}
         <div className="order-0">
@@ -55,6 +64,19 @@ function MyNav() {
               </Button>
             </InputGroup>
           </Form>
+
+          {/* TEMA */}
+          <Button
+            variant={tema === "data-bs-theme-light" ? "light" : "dark"}
+            className={`d-flex align-items-center rounded btn btn-sm ${tema === "data-bs-theme-light" ? "text-dark" : "text-light"}`}
+            onClick={changeTema}
+          >
+            {tema === 'data-bs-theme-light' ?
+              <i className="bi bi-moon-fill"></i>
+              :
+              <i className="bi bi-sun-fill"></i>
+            }
+          </Button>
 
           {/* PROFILO */}
           <Dropdown align="end">
