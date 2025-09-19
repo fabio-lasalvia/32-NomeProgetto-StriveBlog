@@ -28,7 +28,7 @@ function usePostForm() {
     const result = await createNewPost(formData);
 
     if (result) {
-      setPostCreated("Post creato con successo!");
+      setPostCreated("Post creato con successo");
       // Reset del form
       setTitle("");
       setCategory("");
@@ -39,8 +39,10 @@ function usePostForm() {
       setContent("");
 
       setTimeout(() => setPostCreated(null), 3000);
+      return true
     } else {
       setPostCreated("Errore nella creazione del post");
+      return false
     }
   }
 

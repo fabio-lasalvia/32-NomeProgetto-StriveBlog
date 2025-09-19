@@ -36,6 +36,18 @@ export async function createPost(newPost) {
   }
 }
 
+//////////////////////////////
+///// PUT - SINGOLO POST /////
+//////////////////////////////
+export async function updatePost(id, updatedPost) {
+  try {
+    const response = await axios.put(`/posts/${id}`, updatedPost);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 /////////////////////////////////
 ///// DELETE - SINGOLO POST /////
 /////////////////////////////////

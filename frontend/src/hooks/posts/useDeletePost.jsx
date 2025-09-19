@@ -14,10 +14,12 @@ function useDeletePost() {
       setLoading(true);
       setError(null);
       const data = await deletePost(id);
-      setPostDeleted(data);
+      setPostDeleted(data); 
+      return true
     } catch (error) {
       setError(`Errore nell'eliminazione del post: ${error}`);
       console.log("Errore nell'eliminazione del post: ", error.message);
+      return false
     } finally {
       setLoading(false);
     }

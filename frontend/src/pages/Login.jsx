@@ -1,7 +1,10 @@
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import "../../CSS/LoginStyle.css";
+
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAuth } from "../../src/context/AuthContext";
+
 import useToggleTema from "../hooks/common/useToggleTema";
 
 function Login() {
@@ -11,16 +14,17 @@ function Login() {
   };
 
   const [searchParams] = useSearchParams();
-
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = searchParams.get("jwt");
     if (token) {
-      localStorage.setItem("token", token);
+      login(token);
       navigate("/");
     }
   }, []);
+
 
   const { tema } = useToggleTema();
 

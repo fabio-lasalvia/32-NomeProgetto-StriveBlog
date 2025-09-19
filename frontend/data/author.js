@@ -41,7 +41,7 @@ export async function createAuthor(newAuthor) {
 ////////////////////////////////
 export async function updateAuthor(id, updatedAuthor) {
   try {
-    const response = await axios.post(`/authors/${id}`, updatedAuthor);
+    const response = await axios.put(`/authors/${id}`, updatedAuthor);
     return response.data;
   } catch (error) {
     console.log(error);

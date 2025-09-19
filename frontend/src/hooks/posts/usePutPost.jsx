@@ -1,15 +1,16 @@
 import { useState } from "react";
+import { updatePost } from "../../../data/post";
 
-function usePutAuthor() {
+function usePutPost() {
   const [postUpdated, setPostUpdated] = useState(null);
   const [loading, setLoading] = useState();
   const [error, setError] = useState();
 
-  async function updatePost(id) {
+  async function putPostData(id) {
     setLoading(true)
     setError(null)
     try {
-      const data = await updateAuthor(id);
+      const data = await updatePost(id);
       setPostUpdated(data);
     } catch (error) {
       setError("Errore nell'aggiornamento del singolo post: ", error);
@@ -19,7 +20,7 @@ function usePutAuthor() {
     }
   }
 
-  return { postUpdated, loading, error, updatePost };
+  return { postUpdated, loading, error, putPostData };
 }
 
-export default usePutAuthor;
+export default usePutPost;

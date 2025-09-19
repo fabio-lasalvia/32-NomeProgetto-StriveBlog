@@ -6,8 +6,8 @@ function SinglePost({ post }) {
   return (
     <>
       <Col sm={12} md={6} lg={6}>
-        <Card style={{ cursor: "pointer" }}>
-          
+        <Card style={{ cursor: "pointer" }} className="mb-4">
+
           {/* IMG POST */}
           <Card.Img
             src={post.cover}
