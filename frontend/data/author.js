@@ -73,3 +73,33 @@ export async function deleteAuthor(id) {
     console.log(error);
   }
 }
+
+
+
+
+
+////////////////////////////////
+///// GET - UTENTE LOGGATO /////
+////////////////////////////////
+export async function getMe() {
+  try {
+    const response = await axios.get(`/me`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw error;
+  }
+}
+
+////////////////////////////////
+///// PUT - UTENTE LOGGATO /////
+////////////////////////////////
+export async function updateMe(id, updatedMe) {
+  try {
+    const response = await axios.put(`/me/${id}`, updatedMe);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw error;
+  }
+}

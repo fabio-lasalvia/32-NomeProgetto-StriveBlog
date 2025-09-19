@@ -11,9 +11,10 @@ import PostDetails from "./components/posts/PostDetails";
 
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import GuestRoute from "./components/routes/GuestRoute";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
-  const isLogged = !!localStorage.getItem("token");
+  const { isLogged } = useAuth();
 
   return (
     <BrowserRouter>
@@ -41,7 +42,7 @@ function App() {
           <Route index element={<Home />} />
 
           {/* Profilo */}
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/me" element={<Profile />} />
 
           {/* Dettaglio post */}
           <Route path="posts/:id" element={<PostDetails />} />

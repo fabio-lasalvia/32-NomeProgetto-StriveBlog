@@ -78,3 +78,14 @@ export async function patchCover(id, file) {
   }
 }
 
+/////////////////////////////////////////////
+///// GET - TUTTI I POST SINGOLO AUTORE /////
+/////////////////////////////////////////////
+export async function getAllPostsSingleAuthor() {
+  try {
+    const response = await axios.get("/posts");
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

@@ -74,7 +74,6 @@ export async function signup(request, response) {
       from: "studio.fabio.lasalvia@gmail.com",
     });
 
-
     response
       .status(201)
       .json({ message: "Autore creato con successo", author: newAuthor });

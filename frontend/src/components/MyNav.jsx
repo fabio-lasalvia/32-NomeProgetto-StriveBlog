@@ -21,7 +21,6 @@ function MyNav() {
 
   const { isOpen, openModal, closeModal } = useHandleModal();
 
-
   return (
     <>
       <Navbar
@@ -74,8 +73,9 @@ function MyNav() {
             {/* TEMA */}
             <Button
               variant={tema === "data-bs-theme-light" ? "light" : "dark"}
-              className={`d-flex align-items-center rounded btn btn-sm ${tema === "data-bs-theme-light" ? "text-dark" : "text-light"
-                }`}
+              className={`d-flex align-items-center rounded btn btn-sm ${
+                tema === "data-bs-theme-light" ? "text-dark" : "text-light"
+              }`}
               onClick={changeTema}
             >
               {tema === "data-bs-theme-light" ? (
@@ -106,11 +106,18 @@ function MyNav() {
                 {/*----- Se loggato - Profilo, Settings e Logout -----*/}
                 {isLogged && (
                   <>
-                    <Dropdown.Item onClick={() => navigate("/profile")} className="d-flex justify-content-center align-items-center">
+                    <Dropdown.Item
+                      onClick={() => navigate("/me")}
+                      className="d-flex justify-content-center align-items-center"
+                    >
                       Profile
                     </Dropdown.Item>
-                    <Dropdown.Item className="d-flex justify-content-center align-items-center">Settings</Dropdown.Item>
+                    <Dropdown.Item className="d-flex justify-content-center align-items-center">
+                      Settings
+                    </Dropdown.Item>
+
                     <Dropdown.Divider />
+
                     <Dropdown.Item
                       className="text-danger d-flex justify-content-center align-items-center"
                       onClick={openModal}
@@ -148,11 +155,8 @@ function MyNav() {
 
       {/* MODALE DI LOGOUT */}
       <LogoutModal isOpen={isOpen} closeModal={closeModal} />
-
     </>
   );
-
-
 }
 
 export default MyNav;

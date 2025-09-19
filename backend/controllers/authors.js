@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Author from "../models/Author.js";
+import Post from "../models/Post.js";
 
 //////////////////////////////////
 ///// GET - TUTTI GLI AUTORI /////
@@ -20,7 +21,8 @@ export async function getAll(request, response) {
 /////////////////////////////////////////
 export async function create(request, response) {
   try {
-    const { name, surname, email, dateOfBirth, avatar, password } = request.body;
+    const { name, surname, email, dateOfBirth, avatar, password } =
+      request.body;
     if (!name || !surname || !email || !dateOfBirth) {
       return response.status(400).json({
         message:
@@ -113,11 +115,11 @@ export async function remove(request, response) {
   try {
     const { id } = request.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return response.status(400).json({ message: "ID non valido" });
+      return response.status(400).json({ message: "Invalid ID" });
     }
     const deletedAuthor = await Author.findByIdAndDelete(id);
     if (!deletedAuthor) {
-      return response.status(404).json({ message: "Autore non trovato" });
+      return response.status(404).json({ message: "Author not found" });
     }
     response.status(200).json(deletedAuthor);
   } catch (error) {
@@ -135,13 +137,50 @@ export async function addAvatar(request, response) {
     const filePath = request.file.path;
     const { id } = request.params;
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      return response.status(400).json({ message: "ID non valido" });
+      return response.status(400).json({ message: "Invalid ID" });
     }
-    const author = await Author.findByIdAndUpdate(id, { avatar: filePath }, { new: true })
+    const author = await Author.findByIdAndUpdate(
+      id,
+      { avatar: filePath },
+      { new: true }
+    );
     if (!author) {
-      return response.status(400)
+      return response.status(400);
     }
-    return response.status(200).json(author)
+    return response.status(200).json(author);
+  } catch (error) {
+    next(error);
+  }
+}
+
+////////////////////////////////////
+///// GET POSTS SINGOLO AUTORE /////
+////////////////////////////////////
+export async function getAuthorPosts(request, response, next) {
+  try {
+    const { id } = request.params;
+
+    const author = await Author.findById(id);
+
+    if (!author) {
+      return response.status(404).json({ message: "Author not found" });
+    }
+
+    const posts = await Post.find({ author: id }).populate("author");
+
+    return response.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+}
+
+//////////////////////////////
+///// GET UTENTE LOGGATO /////
+//////////////////////////////
+export async function getMe(request, response) {
+  try {
+    const author = request.author;
+    return response.status(200).json(author);
   } catch (error) {
     next(error);
   }
