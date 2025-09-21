@@ -9,6 +9,7 @@ import ConfirmUpdateModal from "../common/ConfirmUpdateModal";
 import useGetPost from "../../hooks/posts/useGetPost";
 import useDeletePost from "../../hooks/posts/useDeletePost";
 import useUpdatePostForm from "../../hooks/posts/useUpdatePostForm";
+import useGetComments from "../../hooks/comments/useGetComments";
 
 function PostDetails() {
   const { id } = useParams();
@@ -18,6 +19,11 @@ function PostDetails() {
   ///// GET SINGLE POST /////
   ///////////////////////////
   const { post, loading, error } = useGetPost(id);
+
+  ////////////////////////
+  ///// GET COMMENTS /////
+  ////////////////////////
+  const { comments, loading: loadingComments, error: errorComments, fetchComments } = useGetComments(id)
 
   //////////////////
   ///// DELETE /////
@@ -131,6 +137,16 @@ function PostDetails() {
               {loadingDelete ? "Deleting..." : "Delete"}
             </Button>
             {errorDelete && <Alert className="mt-2" variant="danger">{errorDelete}</Alert>}
+
+            <h5 className="mt-4">Comments</h5>
+            {loadingComments && <MySpinner />}
+            {errorComments && <Alert variant="danger">{errorComments}</Alert>}
+            {comments.length === 0 && <p>No comments yet</p>}
+            {comments.map((comment) => (
+              <Card.Text key={comment._id} className="border-bottom py-2">
+                {comment.content} - <em>{comment.author}</em>
+              </Card.Text>
+            ))}
           </Card.Body>
         </Card>
       </Col>
