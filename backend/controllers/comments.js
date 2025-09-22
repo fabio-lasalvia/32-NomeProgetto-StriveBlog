@@ -25,21 +25,21 @@ export async function getAllComments(request, response) {
 export async function createComment(request, response) {
   const { text } = request.body;
   const { id } = request.params;
-  if (!mongoose.Types.ObjectId.isValid(author)) {
-    return response.status(400).json({ message: "Author con id non valido" });
-  }
+  // if (!mongoose.Types.ObjectId.isValid(author)) {
+  //   return response.status(400).json({ message: "Author con id non valido" });
+  //}
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return response.status(400).json({ message: "ID non valido" });
   }
 
-  const authorDB = await Author.findById(author);
-  if (!authorDB) {
-    return response.status(404).json({ message: "Autore non trovato" });
-  }
+  // const authorDB = await Author.findById(author);
+  // if (!authorDB) {
+  //   return response.status(404).json({ message: "Autore non trovato" });
+  // }
 
   const post = await Post.findById(id);
   if (!post) {
-    return response.status(404).json({ message: "Post non trovato" }); 
+    return response.status(404).json({ message: "Post non trovato" });
   }
 
   const newComment = { text, author: request.author._id };
@@ -76,7 +76,7 @@ export async function getSingleComment(request, response) {
 /////////////////////////////////
 export async function updateComment(request, response) {
   const { id, commentId } = request.params;
-  const { text, author } = request.body;
+  const { text } = request.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return response.status(400).json({ message: "ID post non valido" });
@@ -84,14 +84,14 @@ export async function updateComment(request, response) {
   if (!mongoose.Types.ObjectId.isValid(commentId)) {
     return response.status(400).json({ message: "ID commento non valido" });
   }
-  if (!mongoose.Types.ObjectId.isValid(author)) {
-    return response.status(400).json({ message: "Autore non valido" });
-  }
+  // if (!mongoose.Types.ObjectId.isValid(author)) {
+  //   return response.status(400).json({ message: "Autore non valido" });
+  // }
 
-  const authorDB = await Author.findById(author);
-  if (!authorDB) {
-    return response.status(404).json({ message: "Autore non trovato" });
-  }
+  // const authorDB = await Author.findById(author);
+  // if (!authorDB) {
+  //   return response.status(404).json({ message: "Autore non trovato" });
+  // }
 
   const post = await Post.findById(id);
   if (!post) {
@@ -104,7 +104,7 @@ export async function updateComment(request, response) {
   }
 
   if (text) post.comments[commentIndex].text = text;
-  if (author) post.comments[commentIndex].author = mongoose.Types.ObjectId(author);
+  // if (author) post.comments[commentIndex].author = mongoose.Types.ObjectId(author);
 
   await post.save();
 

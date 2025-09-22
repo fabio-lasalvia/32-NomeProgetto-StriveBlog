@@ -63,27 +63,31 @@ export async function deletePost(id) {
 ///////////////////////////////
 ///// PATCH - SINGOLO POST /////
 ///////////////////////////////
-export async function patchCover(id, file) {
+export async function patchCover(id, file, token) {
   try {
     const formData = new FormData();
     formData.append("cover", file);
 
     const response = await axios.patch(`/posts/${id}/cover`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     return response.data;
   } catch (error) {
     console.error(error);
+    return Promise.reject(error);
   }
 }
 
 /////////////////////////////////////////////
 ///// GET - TUTTI I POST SINGOLO AUTORE /////
 /////////////////////////////////////////////
-export async function getAllPostsSingleAuthor() {
+export async function getAllPostsSingleAuthor(authorId) {
   try {
-    const response = await axios.get("/posts");
+    const response = await axios.get(`/authors/${authorId}/posts`);
     return response.data;
   } catch (error) {
     console.log(error);

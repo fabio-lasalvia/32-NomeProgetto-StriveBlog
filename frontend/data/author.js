@@ -83,7 +83,7 @@ export async function deleteAuthor(id) {
 ////////////////////////////////
 export async function getMe() {
   try {
-    const response = await axios.get(`/me`);
+    const response = await axios.get(`/authors/me`);
     return response.data;
   } catch (error) {
     console.error("Error fetching user:", error);
@@ -96,7 +96,7 @@ export async function getMe() {
 ////////////////////////////////
 export async function updateMe(id, updatedMe) {
   try {
-    const response = await axios.put(`/me/${id}`, updatedMe);
+    const response = await axios.put(`/authors/me/${id}`, updatedMe);
     return response.data;
   } catch (error) {
     console.error("Error updating user:", error);

@@ -24,7 +24,7 @@ function AllThePosts() {
                   placeholder="Search post..."
                   aria-label="Search"
                 />
-                <Button variant="outline-light">
+                <Button>
                   <i className="bi bi-search"></i>
                 </Button>
               </InputGroup>
@@ -34,7 +34,7 @@ function AllThePosts() {
         ) : (
           <p className="text-center">No posts available</p>
         )}
-        {console.log(posts)}
+        {/* {console.log(posts)} */}
       </Row>
     </>
   );

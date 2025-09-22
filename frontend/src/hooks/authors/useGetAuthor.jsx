@@ -14,8 +14,8 @@ function useGetAuthor(id) {
         const data = await getSingleAuthor(id);
         setAuthor(data);
       } catch (error) {
-        setError("Errore nel caricamento del singolo post: ", error);
-        console.log("Errore nel caricamento del singolo post: ", error.message);
+        setError(`Errore nel caricamento del singolo autore: ${error.message}`);
+        console.log("Errore nel caricamento del singolo autore: ", error.message);
       } finally {
         setLoading(false);
       }

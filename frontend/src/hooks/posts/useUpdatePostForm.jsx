@@ -1,53 +1,52 @@
 import { useState, useEffect } from "react";
-import { updatePost } from "../../../data/post";
+import usePutPost from "./usePutPost";
+import usePatchPost from "./usePatchPost";
 
-function useUpdatePostForm(initialPost = null) {
-    const [title, setTitle] = useState(initialPost?.title || "");
-    const [content, setContent] = useState(initialPost?.content || "");
-    const [category, setCategory] = useState(initialPost?.category || "");
-    const [cover, setCover] = useState(initialPost?.cover || null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+function useUpdatePostForm(post) {
+    const [title, setTitle] = useState("");
+    const [category, setCategory] = useState("");
+    const [cover, setCover] = useState(null);
+    const [text, setText] = useState("");
+    const [author, setAuthor] = useState("");
     const [postUpdated, setPostUpdated] = useState(null);
 
-    useEffect(() => {
-        if (initialPost) {
-            setTitle(initialPost.title || "");
-            setContent(initialPost.content || "");
-            setCategory(initialPost.category || "");
-            setCover(initialPost.cover || null);
-        }
-    }, [initialPost]);
+    const { putPostData, loading: loadingPut, error: errorPut } = usePutPost();
+    const { updateCover, loading: loadingPatch, error: errorPatch } = usePatchPost();
 
-    const handleUpdate = async (id) => {
-        setLoading(true);
-        setError(null);
-        try {
-            const data = await updatePost(id, { title, content, category, cover });
-            setPostUpdated(data);
-            return true;
-        } catch (err) {
-            console.error("Errore aggiornamento post:", err);
-            setError("Errore nell'aggiornamento del post.");
-            return false;
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        if (post) {
+            setTitle(post.title || "");
+            setCategory(post.category || "");
+            setText(post.text || "");
+            setAuthor(post.author || "");
+            setCover(post.cover || null);
         }
-    };
+    }, [post]);
+
+    async function handleUpdate(e) {
+        if (e?.preventDefault) e.preventDefault();
+
+        if (cover instanceof File) {
+            const patched = await updateCover(post.id, cover);
+            if (patched) setCover(patched.cover);
+        }
+
+        const success = await putPostData(post.id, { title, category, text });
+        if (success) setPostUpdated({ ...post, title, category, text, cover });
+
+        return success;
+    }
 
     return {
-        title,
-        setTitle,
-        content,
-        setContent,
-        category,
-        setCategory,
-        cover,
-        setCover,
-        loading,
-        error,
+        title, setTitle,
+        category, setCategory,
+        cover, setCover,
+        text, setText,
+        author,
         postUpdated,
         handleUpdate,
+        loading: loadingPut || loadingPatch,
+        error: errorPut || errorPatch,
     };
 }
 

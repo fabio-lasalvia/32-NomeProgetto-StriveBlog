@@ -5,10 +5,11 @@ import axios from "./axios";
 //////////////////////////////////
 export async function getAllComments(id) {
     try {
-        const response = await axios.get(`/${id}/comments`);
+        const response = await axios.get(`/posts/${id}/comments`);
         return response.data;
     } catch (error) {
         console.log(error);
+        throw error
     }
 }
 
@@ -17,7 +18,7 @@ export async function getAllComments(id) {
 //////////////////////////////////
 export async function getSingleComment(id, commentId) {
     try {
-        const response = await axios.get(`/${id}/comments/${commentId}`);
+        const response = await axios.get(`/posts/${id}/comments/${commentId}`);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -30,7 +31,7 @@ export async function getSingleComment(id, commentId) {
 ///////////////////////////////////
 export async function createComment(id, newComment) {
     try {
-        const response = await axios.post(`/${id}/comments`, newComment);
+        const response = await axios.post(`/posts/${id}/comments`, newComment);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -43,7 +44,7 @@ export async function createComment(id, newComment) {
 //////////////////////////////////
 export async function updateComment(id, commentId, updatedComment) {
     try {
-        const response = await axios.put(`${id}/comments/${commentId}`, updatedComment);
+        const response = await axios.put(`/posts/${id}/comments/${commentId}`, updatedComment);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -56,7 +57,7 @@ export async function updateComment(id, commentId, updatedComment) {
 /////////////////////////////////////
 export async function deleteComment(id, commentId) {
     try {
-        const response = await axios.delete(`${id}/comments/${commentId}`);
+        const response = await axios.delete(`/posts/${id}/comments/${commentId}`);
         return response.data;
     } catch (error) {
         console.log(error);

@@ -47,11 +47,11 @@ export async function create(request, response, next) {
     });
 
     const postSaved = await newPost.save();
-
-    await mailer.sendMail({
-      to: request.author.email,
-      subject: "New Post Created!",
-      html: `
+    try {
+      await mailer.sendMail({
+        to: request.author.email,
+        subject: "New Post Created!",
+        html: `
         <h1>Your Post Has Been Published!</h1>
 
         <p>Hi ${request.author.name} ${request.author.surname},</p>
@@ -64,8 +64,11 @@ export async function create(request, response, next) {
         <p>Keep writing and inspiring!<br/>
         — The StriveBlog Team</p>
       `,
-      from: "studio.fabio.lasalvia@gmail.com",
-    });
+        from: "studio.fabio.lasalvia@gmail.com",
+      });
+    } catch (error) {
+      console.error("Mail non inviata:", error.message);
+    }
 
     response.status(201).json(postSaved);
   } catch (error) {

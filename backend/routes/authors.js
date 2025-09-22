@@ -1,23 +1,34 @@
 import express from "express";
 import { create, getOne, getAll, put, remove, addAvatar, getAuthorPosts, getMe } from "../controllers/authors.js";
 import uploadCloudinary from "../middlewares/uploadCloudinary.js";
+import { authentication } from "../middlewares/auth/authentication.js";
 
 const authorsRouter = express.Router();
 
+////////////////////////////////
+///// Rotta Protetta - /ME /////
+////////////////////////////////
+authorsRouter.get("/me", authentication, getMe)
+
+///////////////////////////
+///// Rotte Pubbliche /////
+///////////////////////////
 authorsRouter.get("/", getAll);
 
 authorsRouter.get("/:id", getOne);
 
-authorsRouter.get("/me", getMe)
+authorsRouter.get("/:id/posts", getAuthorPosts)
 
 authorsRouter.post("/", create);
 
-authorsRouter.get("/:id/posts", getAuthorPosts)
 
-authorsRouter.put("/:id", put);
+//////////////////////////
+///// Rotte Protette /////
+//////////////////////////
+authorsRouter.put("/:id", authentication, put);
 
-authorsRouter.patch('/:id/avatar', uploadCloudinary.single('avatar'), addAvatar)
+authorsRouter.patch('/:id/avatar', authentication, uploadCloudinary.single('avatar'), addAvatar)
 
-authorsRouter.delete("/:id", remove);
+authorsRouter.delete("/:id", authentication, remove);
 
 export default authorsRouter;

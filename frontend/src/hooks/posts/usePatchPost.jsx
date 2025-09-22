@@ -1,17 +1,20 @@
 import { useState } from "react";
-import { patchCover } from "../data/post";
+import { patchCover } from "../../../data/post";
+import { useAuth } from "../../context/AuthContext";
 
 function usePatchPost() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [updatedPost, setUpdatedPost] = useState(null);
+  const { isLogged } = useAuth();
 
   async function updateCover(id, file) {
     setLoading(true);
     setError(null);
 
     try {
-      const post = await patchCover(id, file);
+      const token = localStorage.getItem("token");
+      const post = await patchCover(id, file, token);
       setUpdatedPost(post);
       return post;
     } catch (error) {
