@@ -1,4 +1,4 @@
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Card, Form, Button, Image } from "react-bootstrap";
 import "../../CSS/LoginStyle.css";
 
 import { useEffect } from "react";
@@ -34,8 +34,8 @@ function Login() {
         <Col xs={10} sm={8} md={6} lg={4}>
           <Card className="p-4 shadow-lg rounded-4">
             <div className="text-center mb-4">
-              <img
-                src="/img/logo/faviconStriveBlog.png"
+              <Image
+                src="/32-NomeProgetto-StriveBlog/img/logo/faviconStriveBlog.png"
                 alt="StriveBlog Logo"
                 style={{ maxWidth: "100px", borderRadius: "12px" }}
               />
@@ -66,8 +66,8 @@ function Login() {
                 className="w-100 d-flex align-items-center justify-content-center gap-2 mb-3"
                 onClick={googleLogin}
               >
-                <img
-                  src="/img/logo/logoGoogleLogin.webp"
+                <Image
+                  src="/32-NomeProgetto-StriveBlog/img/logo/logoGoogleLogin.webp"
                   alt="Google Logo"
                   style={{ maxWidth: 24 }}
                 />

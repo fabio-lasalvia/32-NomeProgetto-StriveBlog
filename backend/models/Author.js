@@ -11,7 +11,11 @@ const AuthorSchema = new Schema({
 
   dateOfBirth: { type: String },
 
-  avatar: { type: String },
+  avatar: {
+    type: String,
+    default:
+      "https://res.cloudinary.com/dbqckc5sl/image/upload/v1757097337/noImage_xp0alc.avif",
+  },
 
   password: { type: String, minlength: 6 },
 

@@ -79,13 +79,14 @@ function AddPostForm() {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Tempo di lettura</Form.Label>
+          <Form.Label>Time reading</Form.Label>
           <div className="d-flex gap-2">
             <Form.Control
               type="number"
               value={readTimeValue}
               onChange={(e) => setReadTimeValue(e.target.value)}
               required
+              min={1}
             />
             <Form.Select
               value={readTimeUnit}

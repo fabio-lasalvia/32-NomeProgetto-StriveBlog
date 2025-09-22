@@ -16,7 +16,7 @@ authRouter.get(
     "/callback-google",
     passport.authenticate("google", { session: false }),
     (request, response) => {
-        response.redirect(process.env.FRONTEND_HOST + "/login?jwt=" + request.user.jwt);
+        response.redirect(process.env.FRONTEND_HOST + "#/login?jwt=" + request.user.jwt);
     }
 );
 

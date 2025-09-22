@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -17,7 +17,7 @@ function App() {
   const { isLogged } = useAuth();
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         {/* GUEST ROUTES */}
         <Route
@@ -51,7 +51,7 @@ function App() {
           <Route path="add-post" element={<AddPost />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

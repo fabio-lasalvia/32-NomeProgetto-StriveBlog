@@ -61,7 +61,7 @@ function PostDetails() {
 
           <Card.Body>
             {/* TITOLO */}
-            <Card.Title className="text-center mb-3">{post.title}</Card.Title>
+            <Card.Title className="text-center mb-3 text-primary">{post.title}</Card.Title>
 
             {/* CATEGORIA */}
             <Card.Text className="text-center fst-italic fw-semibold mb-3">
@@ -69,7 +69,7 @@ function PostDetails() {
             </Card.Text>
 
             {/* CONTENUTO */}
-            <Card.Text className="fst-italic fw-semibold text-primary">
+            <Card.Text className="fst-italic fw-semibold">
               {post.content}
             </Card.Text>
 

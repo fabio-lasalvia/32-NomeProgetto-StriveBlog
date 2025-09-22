@@ -13,7 +13,7 @@ const PostSchema = new Schema({
   },
 
   readTime: {
-    value: { type: Number, required: true },
+    value: { type: Number, required: true, min: 1 },
     unit: { type: String, default: "minute" },
   },
 
