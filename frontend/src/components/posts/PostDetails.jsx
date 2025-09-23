@@ -10,6 +10,7 @@ import CommentArea from "../comments/CommentArea";
 import useGetPost from "../../hooks/posts/useGetPost";
 import useDeletePost from "../../hooks/posts/useDeletePost";
 import usePutPost from "../../hooks/posts/usePutPost";
+import usePatchPost from "../../hooks/posts/usePatchPost";
 
 function PostDetails() {
   const { id } = useParams();
@@ -40,9 +41,13 @@ function PostDetails() {
     category: "",
     content: "",
     readTime: 1,
+    coverFile: null,
+    coverPreview: "",
   });
 
   const { putPostData, loading: loadingPut, error: errorPut } = usePutPost();
+
+  const { updateCover, loading: loadingCover, error: errorCover } = usePatchPost();
 
   // inizializza formData quando arriva il post
   useEffect(() => {
@@ -52,6 +57,8 @@ function PostDetails() {
         category: post.category,
         content: post.content,
         readTime: post.readTime?.value || 1,
+        coverFile: null,
+        coverPreview: post.cover,
       });
     }
   }, [post]);
@@ -60,21 +67,42 @@ function PostDetails() {
   const handleCancelEdit = () => setIsEditing(false);
 
   const handleSaveEdit = async () => {
-    const success = await putPostData(id, {
+    let coverSuccess = true;
+    let updatedCover = formData.coverPreview;
+
+    if (formData.coverFile) {
+      try {
+        const updatedPost = await updateCover(id, formData.coverFile);
+        if (!updatedPost || !updatedPost.cover) {
+          coverSuccess = false;
+          alert("Errore aggiornamento cover");
+        } else {
+          updatedCover = updatedPost.cover;
+          setFormData((prev) => ({ ...prev, coverPreview: updatedCover }));
+        }
+      } catch (err) {
+        console.error("Errore aggiornamento cover:", err);
+        coverSuccess = false;
+      }
+    }
+
+    if (!coverSuccess) return;
+
+    const putSuccess = await putPostData(id, {
       title: formData.title,
       category: formData.category,
       content: formData.content,
       readTime: { value: Number(formData.readTime), unit: "minute" },
     });
 
-    if (success) {
+    if (putSuccess) {
       setIsEditing(false);
-      // aggiorna UI locale
       Object.assign(post, {
         title: formData.title,
         category: formData.category,
         content: formData.content,
         readTime: { value: Number(formData.readTime), unit: "minute" },
+        cover: updatedCover,
       });
     }
   };
@@ -93,12 +121,41 @@ function PostDetails() {
 
         <Card className="position-relative">
           {/* IMG POST */}
-          <Card.Img
-            src={post.cover}
-            variant="top"
-            className="w-100"
-            style={{ height: "400px", objectFit: "cover" }}
-          />
+          <div className="position-relative mb-3" style={{ height: "400px", cursor: isEditing ? "pointer" : "default" }}>
+            <Card.Img
+              src={formData.coverPreview || post.cover}
+              variant="top"
+              className="w-100 h-100"
+              style={{ objectFit: "cover", filter: isEditing && "brightness(50%)" }}
+            />
+
+            {isEditing && (
+              <>
+                <div
+                  className="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+                  onClick={() => document.getElementById("coverInput").click()}
+                >
+                  <i className="bi bi-pencil-circle text-white" style={{ fontSize: "3rem" }}></i>
+                </div>
+                <input
+                  id="coverInput"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        coverFile: file,
+                        coverPreview: URL.createObjectURL(file),
+                      }));
+                    }
+                  }}
+                />
+              </>
+            )}
+          </div>
 
           <Card.Body>
             {/* TITOLO */}
@@ -156,9 +213,22 @@ function PostDetails() {
             )}
 
             {/* AUTORE */}
-            <Card.Text className="text-center fst-italic fw-semibold">
-              {post.author?.name || post.author?.email || post.author || "Unknown author"}
-            </Card.Text>
+            <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
+              <Card.Img
+                src={post.author?.avatar}
+                alt={post.author?.name}
+                style={{ width: "50px", height: "50px", borderRadius: "50%", objectFit: "cover", cursor: "pointer" }}
+                onClick={() => navigate(`/authors/${post.author._id}`)}
+              />
+
+              <Card.Text
+                className="fst-italic fw-semibold mb-0"
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate(`/authors/${post.author._id}`)}
+              >
+                {post.author.name} {post.author.surname || ""}
+              </Card.Text>
+            </div>
 
             {/* BOTTONI AZIONI */}
             <div className="d-flex justify-content-center gap-2 mb-4">

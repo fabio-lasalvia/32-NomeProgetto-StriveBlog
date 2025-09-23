@@ -10,7 +10,7 @@ function useGetPost(id) {
     if (!id) return;
     async function fetchPost() {
       try {
-        console.log("Fetching post id from frontend:", id);
+       // console.log("Fetching post id from frontend:", id);
         const data = await getSinglePost(id);
         setPost(data);
       } catch (error) {

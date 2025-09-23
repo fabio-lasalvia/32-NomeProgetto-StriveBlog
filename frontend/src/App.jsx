@@ -12,6 +12,7 @@ import PostDetails from "./components/posts/PostDetails";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import GuestRoute from "./components/routes/GuestRoute";
 import { useAuth } from "./context/AuthContext";
+import AllPostsSingleAuthor from "./pages/AllPostsSingleAuthor";
 
 function App() {
   const { isLogged } = useAuth();
@@ -49,6 +50,9 @@ function App() {
 
           {/* Aggiungi post */}
           <Route path="add-post" element={<AddPost />} />
+
+          {/* Post dell'autore che li ha pubblicati */}
+          <Route path="/authors/:authorId" element={<AllPostsSingleAuthor />} />
         </Route>
       </Routes>
     </HashRouter>
