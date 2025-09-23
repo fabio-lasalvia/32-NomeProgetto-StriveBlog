@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Col, Card, Alert, Button } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -9,6 +9,7 @@ import CommentArea from "../comments/CommentArea";
 
 import useGetPost from "../../hooks/posts/useGetPost";
 import useDeletePost from "../../hooks/posts/useDeletePost";
+import usePutPost from "../../hooks/posts/usePutPost";
 
 function PostDetails() {
   const { id } = useParams();
@@ -34,9 +35,49 @@ function PostDetails() {
 
   //// EDIT/UPDATE ////
   const [isEditing, setIsEditing] = useState(false);
-  const handleEditClick = () => setIsEditing((prev) => !prev);
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "",
+    content: "",
+    readTime: 1,
+  });
 
+  const { putPostData, loading: loadingPut, error: errorPut } = usePutPost();
+
+  // inizializza formData quando arriva il post
+  useEffect(() => {
+    if (post) {
+      setFormData({
+        title: post.title,
+        category: post.category,
+        content: post.content,
+        readTime: post.readTime?.value || 1,
+      });
+    }
+  }, [post]);
+
+  const handleEditClick = () => setIsEditing(true);
   const handleCancelEdit = () => setIsEditing(false);
+
+  const handleSaveEdit = async () => {
+    const success = await putPostData(id, {
+      title: formData.title,
+      category: formData.category,
+      content: formData.content,
+      readTime: { value: Number(formData.readTime), unit: "minute" },
+    });
+
+    if (success) {
+      setIsEditing(false);
+      // aggiorna UI locale
+      Object.assign(post, {
+        title: formData.title,
+        category: formData.category,
+        content: formData.content,
+        readTime: { value: Number(formData.readTime), unit: "minute" },
+      });
+    }
+  };
 
   //// LOADING / ERROR ////
   if (loading) return <MySpinner />;
@@ -61,17 +102,58 @@ function PostDetails() {
 
           <Card.Body>
             {/* TITOLO */}
-            <Card.Title className="text-center mb-3 text-primary">{post.title}</Card.Title>
+            {isEditing ? (
+              <input
+                type="text"
+                className="form-control mb-3"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              />
+            ) : (
+              <Card.Title className="text-center mb-3 text-primary">{post.title}</Card.Title>
+            )}
 
             {/* CATEGORIA */}
-            <Card.Text className="text-center fst-italic fw-semibold mb-3">
-              {post.category}
-            </Card.Text>
+            {isEditing ? (
+              <input
+                type="text"
+                className="form-control mb-3"
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              />
+            ) : (
+              <Card.Text className="text-center fst-italic fw-semibold mb-3">
+                {post.category}
+              </Card.Text>
+            )}
 
             {/* CONTENUTO */}
-            <Card.Text className="fst-italic fw-semibold">
-              {post.content}
-            </Card.Text>
+            {isEditing ? (
+              <textarea
+                className="form-control mb-3"
+                rows={5}
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              />
+            ) : (
+              <Card.Text className="fst-italic fw-semibold">{post.content}</Card.Text>
+            )}
+
+            {/* TEMPO DI LETTURA */}
+            {isEditing ? (
+              <input
+                type="number"
+                min="1"
+                className="form-control mb-3"
+                value={formData.readTime}
+                onChange={(e) => setFormData({ ...formData, readTime: e.target.value })}
+              />
+            ) : (
+              <Card.Text className="text-center fst-italic fw-semibold">
+                <i className="bi bi-clock me-2"></i>
+                {post.readTime?.value} {post.readTime?.unit || "minutes"}
+              </Card.Text>
+            )}
 
             {/* AUTORE */}
             <Card.Text className="text-center fst-italic fw-semibold">
@@ -80,27 +162,44 @@ function PostDetails() {
 
             {/* BOTTONI AZIONI */}
             <div className="d-flex justify-content-center gap-2 mb-4">
-              <Button
-                size="sm"
-                variant={isEditing ? "success" : "warning"}
-                onClick={handleEditClick}
-              >
-                <i className={`bi ${isEditing ? "bi-check-lg" : "bi-pencil-square"} me-1`}></i>
-                {isEditing ? "Save" : "Edit"}
-              </Button>
-
-              <Button
-                size="sm"
-                variant={isEditing ? "secondary" : "danger"}
-                onClick={isEditing ? handleCancelEdit : handleOpenDeleteModal}
-                disabled={loadingDelete && !isEditing}
-              >
-                <i className={`bi ${isEditing ? "bi-x-lg" : "bi-trash"} me-1`}></i>
-                {isEditing ? "Cancel" : "Delete"}
-              </Button>
+              {isEditing ? (
+                <>
+                  <Button
+                    size="sm"
+                    variant="success"
+                    onClick={handleSaveEdit}
+                    disabled={loadingPut}
+                  >
+                    <i className="bi bi-check-lg me-1"></i>Save
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={handleCancelEdit}
+                    disabled={loadingPut}
+                  >
+                    <i className="bi bi-x-lg me-1"></i>Cancel
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button size="sm" variant="warning" onClick={handleEditClick}>
+                    <i className="bi bi-pencil-square me-1"></i>Edit
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    onClick={handleOpenDeleteModal}
+                    disabled={loadingDelete}
+                  >
+                    <i className="bi bi-trash me-1"></i>Delete
+                  </Button>
+                </>
+              )}
             </div>
 
             {errorDelete && <Alert variant="danger">{errorDelete}</Alert>}
+            {errorPut && <Alert variant="danger">{errorPut}</Alert>}
 
             {/* COMMENT AREA */}
             <CommentArea postId={id} />
