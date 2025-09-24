@@ -35,7 +35,7 @@ function Login() {
           <Card className="p-4 shadow-lg rounded-4">
             <div className="text-center mb-4">
               <Image
-                src="/32-NomeProgetto-StriveBlog/img/logo/faviconStriveBlog.png"
+                src="img/logo/faviconStriveBlog.png"
                 alt="StriveBlog Logo"
                 style={{ maxWidth: "100px", borderRadius: "12px" }}
               />
@@ -67,7 +67,7 @@ function Login() {
                 onClick={googleLogin}
               >
                 <Image
-                  src="/32-NomeProgetto-StriveBlog/img/logo/logoGoogleLogin.webp"
+                  src="img/logo/logoGoogleLogin.webp"
                   alt="Google Logo"
                   style={{ maxWidth: 24 }}
                 />
