@@ -18,7 +18,7 @@ function App() {
   const { isLogged } = useAuth();
 
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         {/* GUEST ROUTES */}
         <Route
@@ -55,7 +55,7 @@ function App() {
           <Route path="/authors/:id/posts" element={<AllPostsSingleAuthor />} />
         </Route>
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
