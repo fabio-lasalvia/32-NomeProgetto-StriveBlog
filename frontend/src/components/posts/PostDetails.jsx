@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Col, Card, Alert, Button } from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 import MySpinner from "../common/MySpinner";
 import ConfirmDeleteModal from "../common/ConfirmDeleteModal";
@@ -114,6 +114,8 @@ function PostDetails() {
   if (error) return <Alert variant="danger">{error}</Alert>;
   if (!post) return <p className="text-center">Post not found</p>;
 
+  console.log(post);
+
   return (
     <>
       <Col sm={12} md={12} lg={10} className="mx-auto my-4">
@@ -181,9 +183,7 @@ function PostDetails() {
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               />
             ) : (
-              <Card.Text className="text-center fst-italic fw-semibold mb-3">
-                {post.category}
-              </Card.Text>
+              <Card.Text className="text-center fst-italic fw-semibold mb-3">{post.category}</Card.Text>
             )}
 
             {/* CONTENUTO */}
@@ -216,40 +216,32 @@ function PostDetails() {
 
             {/* AUTORE */}
             <div className="d-flex align-items-center justify-content-center gap-2 mb-3">
-              <Card.Img
-                src={post.author?.avatar}
-                alt={post.author?.name}
-                style={{ width: "50px", height: "50px", borderRadius: "50%", objectFit: "cover", cursor: "pointer" }}
-                onClick={() => navigate(`/authors/${post.author._id}`)}
-              />
-
-              <Card.Text
-                className="fst-italic fw-semibold mb-0"
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate(`/authors/${post.author._id}`)}
-              >
-                {post.author.name} {post.author.surname || ""}
-              </Card.Text>
+              <Link to={`/authors/${post.author?._id}/posts`} className="d-flex align-items-center gap-2">
+                <Card.Img
+                  src={post.author?.avatar}
+                  alt={post.author?.name}
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    cursor: "pointer",
+                  }}
+                />
+                <span className="fst-italic fw-semibold" style={{ cursor: "pointer" }}>
+                  {post.author?.name} {post.author?.surname || ""}
+                </span>
+              </Link>
             </div>
 
             {/* BOTTONI AZIONI */}
             <div className="d-flex justify-content-center gap-2 mb-4">
               {isEditing ? (
                 <>
-                  <Button
-                    size="sm"
-                    variant="success"
-                    onClick={handleSaveEdit}
-                    disabled={isSaving}
-                  >
+                  <Button size="sm" variant="success" onClick={handleSaveEdit} disabled={isSaving}>
                     <i className="bi bi-check-lg me-1"></i>Save
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={handleCancelEdit}
-                    disabled={isSaving}
-                  >
+                  <Button size="sm" variant="secondary" onClick={handleCancelEdit} disabled={isSaving}>
                     <i className="bi bi-x-lg me-1"></i>Cancel
                   </Button>
                 </>
@@ -258,12 +250,7 @@ function PostDetails() {
                   <Button size="sm" variant="warning" onClick={handleEditClick}>
                     <i className="bi bi-pencil-square me-1"></i>Edit
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    onClick={handleOpenDeleteModal}
-                    disabled={loadingDelete}
-                  >
+                  <Button size="sm" variant="danger" onClick={handleOpenDeleteModal} disabled={loadingDelete}>
                     <i className="bi bi-trash me-1"></i>Delete
                   </Button>
                 </>
@@ -276,6 +263,7 @@ function PostDetails() {
             {/* COMMENT AREA */}
             <CommentArea postId={id} />
           </Card.Body>
+
         </Card>
       </Col>
 

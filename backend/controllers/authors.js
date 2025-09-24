@@ -185,3 +185,32 @@ export async function getMe(request, response) {
     next(error);
   }
 }
+
+//////////////////////////////////////
+///// PATCH - BIO UTENTE LOGGATO /////
+//////////////////////////////////////
+export async function updateBio(request, response) {
+  try {
+    const { id } = request.params;
+    const { bio } = request.body;
+
+    if (typeof bio !== "string" || bio.length > 500) {
+      return response.status(400).json({ message: "Invalid bio (max 500 characters)" });
+    }
+
+    const updatedAuthor = await Author.findByIdAndUpdate(
+      id,
+      { bio },
+      { new: true }
+    );
+
+    if (!updatedAuthor) {
+      return response.status(404).json({ message: "Author not found" });
+    }
+
+    return response.status(200).json(updatedAuthor);
+  } catch (error) {
+    return response.status(500).json({ message: "Error updating bio", error });
+  }
+}
+

@@ -24,6 +24,18 @@ export async function getSingleAuthor(id) {
   }
 }
 
+//////////////////////////////////////////
+///// GET - SINGOLO AUTORE SUOI POST /////
+//////////////////////////////////////////
+export async function getAuthorPosts(id) {
+  try {
+    const response = await axios.get(`/authors/${id}/posts`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 /////////////////////////////////
 ///// POST - SINGOLO AUTORE /////
 /////////////////////////////////
@@ -48,9 +60,22 @@ export async function updateAuthor(id, updatedAuthor) {
   }
 }
 
-//////////////////////////////////
-///// PATCH - SINGOLO AUTORE /////
-//////////////////////////////////
+///////////////////////////////////////////
+///// PATCH - SINGOLO AUTORE (bio) ///////
+///////////////////////////////////////////
+export async function patchAuthorBio(id, bio) {
+  try {
+    const response = await axios.patch(`/authors/${id}/bio`, { bio });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating bio:", error);
+    throw error;
+  }
+}
+
+///////////////////////////////////////////
+///// PATCH - SINGOLO AUTORE (avatar) /////
+///////////////////////////////////////////
 export async function patchAuthor(id, file) {
   const formData = new FormData();
   formData.append("avatar", file);

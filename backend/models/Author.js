@@ -23,6 +23,8 @@ const AuthorSchema = new Schema({
 
   OTP: {type: String},
 
+  bio: { type: String, maxlength: 500, default: "" },
+
 });
 
 AuthorSchema.pre("save", async function (next) {

@@ -17,15 +17,13 @@ const PostSchema = new Schema({
     unit: { type: String, default: "minute" },
   },
 
-  author: { type: String, required: true },
+  //referencing
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: "Author",
+  },
 
   content: { type: String, required: true },
-
-  //referencing
-  // author: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: "Author",
-  // },
 
   //embedding
   comments: [

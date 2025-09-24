@@ -31,13 +31,13 @@ function MyNav() {
       >
         <Container fluid className="align-items-center">
           {/* SINISTRA: LOGO */}
-          <div className="order-0">
+          <div className="order-0 logo">
             <Navbar.Brand as={NavLink} to="/">
               <img
-                src="img/logo/logoStriveBlog0.png"
+                src="img/logo/logoStriveBlog00.png"
                 alt="Logo Strive Blog"
                 className="rounded"
-                style={{ maxWidth: "100px" }}
+                style={{ width: "200px", height: "80px", objectFit: "cover" }}
               />
             </Navbar.Brand>
           </div>
@@ -57,7 +57,7 @@ function MyNav() {
           {/* DESTRA: SEARCHBAR + PROFILO + HAMBURGER */}
           <div className="ms-auto d-flex align-items-center gap-2 order-2">
             {/* SEARCHBAR */}
-            <Form className="d-flex" role="search">
+            <Form className="d-flex w-100" role="search">
               <InputGroup size="sm">
                 <Form.Control
                   type="search"

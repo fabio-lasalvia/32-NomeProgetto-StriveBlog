@@ -1,5 +1,5 @@
 import express from "express";
-import { create, getOne, getAll, put, remove, addAvatar, getAuthorPosts, getMe } from "../controllers/authors.js";
+import { create, getOne, getAll, put, remove, addAvatar, getAuthorPosts, getMe, updateBio } from "../controllers/authors.js";
 import {uploadCloudinary} from "../middlewares/uploadCloudinary.js";
 import { authentication } from "../middlewares/auth/authentication.js";
 
@@ -26,6 +26,8 @@ authorsRouter.post("/", create);
 ///// Rotte Protette /////
 //////////////////////////
 authorsRouter.put("/:id", authentication, put);
+
+authorsRouter.patch("/:id/bio", authentication, updateBio);
 
 authorsRouter.patch('/:id/avatar', authentication, uploadCloudinary.single('avatar'), addAvatar)
 

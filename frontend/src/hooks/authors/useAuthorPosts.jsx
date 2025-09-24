@@ -1,29 +1,28 @@
 import { useEffect, useState } from "react";
-import axios from "../../../data/axios";
+import { getAuthorPosts } from "../../../data/author";
 
-export default function useAuthorPosts(authorId) {
+export default function useAuthorPosts(id) {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (!authorId) return;
-
+        if (!id) return;
         const fetchPosts = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get(`/authors/${authorId}/posts`);
-                setPosts(response.data);
+                const data = await getAuthorPosts(id);
+                setPosts(data);
             } catch (error) {
                 console.error(error);
-                setError("Impossibile caricare i post dell'autore");
+                setError(`Cannot loading author's posts: ${error.message}`);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchPosts();
-    }, [authorId]);
+    }, [id]);
 
     return { posts, loading, error };
 }

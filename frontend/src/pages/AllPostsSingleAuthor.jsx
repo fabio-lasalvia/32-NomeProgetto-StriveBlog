@@ -1,62 +1,64 @@
-// src/pages/AllPostsSingleAuthor.jsx
-import { useParams, Link } from "react-router-dom"
-import { Container, Row, Col, Card, Alert } from "react-bootstrap"
-import useAuthorPosts from "../hooks/authors/useAuthorPosts"
-import MySpinner from "../components/common/MySpinner"
+import { useNavigate, useParams } from "react-router-dom";
+import { Container, Row, Col, Card, Alert, Button } from "react-bootstrap";
+import useAuthorPosts from "../hooks/authors/useAuthorPosts";
+import MySpinner from "../components/common/MySpinner";
 
-function AllPostsSingleAuthor() {
-  const { authorId } = useParams()
-  const { posts, loading, error } = useAuthorPosts(authorId)
+export default function AllPostsSingleAuthor() {
+  const { id } = useParams();
+  const { posts, loading, error } = useAuthorPosts(id);
+  const navigate = useNavigate();
 
-  if (loading) return <MySpinner/>
-    
-
-  if (error) {
-    return (
-      <Container className="py-5">
-        <Alert variant="danger">{error}</Alert>
-      </Container>
-    )
-  }
-
-  if (posts.length === 0) {
-    return (
-      <Container className="py-5 text-center">
-        <p>Nessun post trovato per questo autore.</p>
-      </Container>
-    )
-  }
+  if (loading) return <MySpinner />
+  if (error) return <Alert variant="danger">{error}</Alert>;
 
   return (
-    <Container className="py-5">
-      <h2 className="mb-4">Post di questo autore</h2>
-      <Row>
-        {posts.map((post) => (
-          <Col md={4} sm={6} xs={12} key={post._id} className="mb-4">
-            <Card>
-              {post.cover && (
+    <Container className="py-4">
+
+      <div className="d-flex align-items-center mb-4">
+        <Button className="me-3" onClick={() => navigate(-1)}>
+          <i className="bi bi-arrow-left me-2"></i>Back
+        </Button>
+        <h2 className="mx-auto mb-0">Posts by this author</h2>
+      </div>
+
+      {posts.length === 0 ? (
+        <Alert variant="info">No posts found for this author.</Alert>
+      ) : (
+        posts.map((post) => (
+          <Card key={post._id} className="mb-3 shadow-sm">
+            <Row className="g-0 align-items-center">
+              {/* Cover */}
+              <Col md={3}>
                 <Card.Img
-                  variant="top"
                   src={post.cover}
                   alt={post.title}
-                  style={{ height: "200px", objectFit: "cover" }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "8px 0 0 8px",
+                  }}
                 />
-              )}
-              <Card.Body>
+              </Col>
+
+              {/* Title + Content */}
+              <Col md={7} className="p-3">
                 <Card.Title>{post.title}</Card.Title>
-                <Card.Text className="text-truncate">
+                <Card.Text className="text-muted" style={{ fontSize: "0.95rem" }}>
                   {post.content}
                 </Card.Text>
-                <Link to={`/posts/${post._id}`} className="btn btn-primary btn-sm">
-                  Read more
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-    </Container>
-  )
-}
+              </Col>
 
-export default AllPostsSingleAuthor
+              {/* Read time */}
+              <Col md={2} className="text-center p-3">
+                <small className="text-secondary">
+                  {post.readTime?.value} {post.readTime?.unit}
+                </small>
+              </Col>
+            </Row>
+          </Card>
+        ))
+      )}
+    </Container>
+  );
+}

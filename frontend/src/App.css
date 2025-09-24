@@ -17,3 +17,13 @@ body {
     background-color: #444;
     color: #fff;
 }
+
+/* Layout nav - mobile */
+@media (max-width: 767.98px) {
+  .logo {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

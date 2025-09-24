@@ -52,7 +52,7 @@ function App() {
           <Route path="add-post" element={<AddPost />} />
 
           {/* Post dell'autore che li ha pubblicati */}
-          <Route path="/authors/:authorId" element={<AllPostsSingleAuthor />} />
+          <Route path="/authors/:id/posts" element={<AllPostsSingleAuthor />} />
         </Route>
       </Routes>
     </HashRouter>
