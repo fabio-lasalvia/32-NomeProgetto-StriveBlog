@@ -49,6 +49,8 @@ function PostDetails() {
 
   const { updateCover, loading: loadingCover, error: errorCover } = usePatchPost();
 
+  const isSaving = loadingPut || loadingCover;
+
   // inizializza formData quando arriva il post
   useEffect(() => {
     if (post) {
@@ -115,7 +117,7 @@ function PostDetails() {
   return (
     <>
       <Col sm={12} md={12} lg={10} className="mx-auto my-4">
-        <Button className="mb-3" onClick={() => navigate("/")}>
+        <Button className="mb-3" onClick={() => navigate(-1)}>
           <i className="bi bi-arrow-left me-2"></i>Back
         </Button>
 
@@ -238,7 +240,7 @@ function PostDetails() {
                     size="sm"
                     variant="success"
                     onClick={handleSaveEdit}
-                    disabled={loadingPut}
+                    disabled={isSaving}
                   >
                     <i className="bi bi-check-lg me-1"></i>Save
                   </Button>
@@ -246,7 +248,7 @@ function PostDetails() {
                     size="sm"
                     variant="secondary"
                     onClick={handleCancelEdit}
-                    disabled={loadingPut}
+                    disabled={isSaving}
                   >
                     <i className="bi bi-x-lg me-1"></i>Cancel
                   </Button>

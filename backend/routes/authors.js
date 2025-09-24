@@ -1,6 +1,6 @@
 import express from "express";
 import { create, getOne, getAll, put, remove, addAvatar, getAuthorPosts, getMe } from "../controllers/authors.js";
-import uploadCloudinary from "../middlewares/uploadCloudinary.js";
+import {uploadCloudinary} from "../middlewares/uploadCloudinary.js";
 import { authentication } from "../middlewares/auth/authentication.js";
 
 const authorsRouter = express.Router();

@@ -35,16 +35,19 @@ export async function create(request, response, next) {
       return response.status(401).json({ message: "Authentication required" });
     }
 
-    const cover = request.file ? request.file.path : undefined;
-
-    const newPost = new Post({
+    const newPostData = {
       category,
       title,
-      cover,
       readTime,
       author: request.author._id,
       content,
-    });
+    };
+
+    if (request.file) {
+      newPostData.cover = request.file.path;
+    }
+
+    const newPost = new Post(newPostData);
 
     const postSaved = await newPost.save();
     try {
@@ -71,6 +74,7 @@ export async function create(request, response, next) {
     }
 
     response.status(201).json(postSaved);
+
   } catch (error) {
     if (error.code === 11000) {
       return response.status(400).json({ message: "Duplicate field error" });
@@ -99,14 +103,18 @@ export async function getOne(request, response, next) {
 //////////////////////////////
 export async function put(request, response, next) {
   try {
-    const { category, title, cover, readTime, content } = request.body;
+    const { category, title, readTime, content } = request.body;
     const post = request.post;
 
-    post.category = category;
-    post.title = title;
-    post.cover = cover;
-    post.readTime = readTime;
-    post.content = content;
+    post.category = category ?? post.category;
+    post.title = title ?? post.title;
+    post.readTime = readTime ?? post.readTime;
+    post.content = content ?? post.content;
+
+    // Se viene caricato un nuovo file aggiorna la cover
+    if (request.file) {
+      post.cover = request.file.path;
+    }
 
     await post.save();
     response.status(200).json(post);

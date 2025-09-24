@@ -1,7 +1,7 @@
 import express from "express";
 import { create, getOne, getAll, put, remove, addCover } from "../controllers/posts.js";
 
-import uploadCloudinary from "../middlewares/uploadCloudinary.js";
+import {uploadCloudinary} from "../middlewares/uploadCloudinary.js";
 import { authentication } from "../middlewares/auth/authentication.js";
 
 import { validatePostId } from "../middlewares/posts/validatePostId.js";
