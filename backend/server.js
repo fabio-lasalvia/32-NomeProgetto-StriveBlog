@@ -18,7 +18,7 @@ import passport from "passport";
 
 
 const server = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 
 server.use(cors());
 server.use(morgan("tiny"));
