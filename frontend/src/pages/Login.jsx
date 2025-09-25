@@ -58,6 +58,7 @@ function Login() {
                 variant={tema === "data-bs-theme-light" ? "primary" : "outline-primary"}
                 className="w-100 mb-3"
               >
+                <i className="bi bi-box-arrow-in-right me-2"></i>
                 Login
               </Button>
 
@@ -77,10 +78,10 @@ function Login() {
               <Button
                 variant={tema === "data-bs-theme-light" ? "secondary" : "outline-secondary"}
                 className="w-100 mb-3"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/signup")}
               >
-                <i className="bi bi-arrow-left me-2"></i>
-                Back
+                <i className="bi bi-box-arrow-in-right me-2"></i>
+                Register
               </Button>
             </Form>
           </Card>
