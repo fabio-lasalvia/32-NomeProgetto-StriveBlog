@@ -8,11 +8,16 @@ import Author from "../models/Author.js"
 // console.log(process.env.PORT)
 // console.log(process.env.GOOGLE_CALLBACK_PATH)
 
+const callbackURL = `${process.env.BACKEND_HOST}${process.env.GOOGLE_CALLBACK_PATH}`;
+console.log("GOOGLE callbackURL:", callbackURL);
+console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
+
+
 const googleStrategy = new GoogleStrategy(
     {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: `${process.env.BACKEND_HOST}${process.env.GOOGLE_CALLBACK_PATH}`,
+        callbackURL: callbackURL
     },
     async function (accessToken, refreshToken, profile, callback) {
         try {
