@@ -7,17 +7,25 @@ import ConfirmDeleteModal from "../common/ConfirmDeleteModal";
 
 import CommentArea from "../comments/CommentArea";
 
+import useGetMe from "../../hooks/authors/useGetMe";
 import useGetPost from "../../hooks/posts/useGetPost";
 import useDeletePost from "../../hooks/posts/useDeletePost";
 import usePutPost from "../../hooks/posts/usePutPost";
 import usePatchPost from "../../hooks/posts/usePatchPost";
 
+
 function PostDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  //// GET UTENTE LOGGATO ////
+  const { me } = useGetMe();
+
   //// GET SINGLE POST ////
   const { post, loading, error } = useGetPost(id);
+
+  /// utente loggato = autore post? ///
+  const isOwner = me?._id === post?.author?._id;
 
   //// DELETE ////
   const { handleDelete, loading: loadingDelete, error: errorDelete } = useDeletePost();
@@ -246,15 +254,16 @@ function PostDetails() {
                   </Button>
                 </>
               ) : (
-                <>
-                  <Button size="sm" variant="warning" onClick={handleEditClick}>
-                    <i className="bi bi-pencil-square me-1"></i>Edit
-                  </Button>
-                  <Button size="sm" variant="danger" onClick={handleOpenDeleteModal} disabled={loadingDelete}>
-                    <i className="bi bi-trash me-1"></i>Delete
-                  </Button>
-                </>
-              )}
+                isOwner && (
+                  <>
+                    <Button size="sm" variant="warning" onClick={handleEditClick}>
+                      <i className="bi bi-pencil-square me-1"></i>Edit
+                    </Button>
+                    <Button size="sm" variant="danger" onClick={handleOpenDeleteModal} disabled={loadingDelete}>
+                      <i className="bi bi-trash me-1"></i>Delete
+                    </Button>
+                  </>
+                ))}
             </div>
 
             {errorDelete && <Alert variant="danger">{errorDelete}</Alert>}
