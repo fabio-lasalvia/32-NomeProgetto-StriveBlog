@@ -6,8 +6,10 @@ import useGetComments from "../../hooks/comments/useGetComments";
 import useCreateComment from "../../hooks/comments/useCreateComment";
 import useDeleteComment from "../../hooks/comments/useDeleteComment";
 import usePutComment from "../../hooks/comments/usePutComment";
+import useGetMe from "../../hooks/authors/useGetMe";
 
 function CommentArea({ postId }) {
+    const { me } = useGetMe();
     const { comments, loading, error, fetchComments } = useGetComments(postId);
     const { createNewComment, loading: loadingCreate, error: errorCreate } = useCreateComment();
     const { handleDelete: deleteComment, loading: loadingDelete, error: errorDelete } = useDeleteComment();
@@ -76,53 +78,57 @@ function CommentArea({ postId }) {
             {error && <Alert variant="danger">{error}</Alert>}
             {comments.length === 0 && !loading && <p>No comments yet</p>}
 
-            {comments.map((comment) => (
-                <div
-                    key={comment._id}
-                    className="border-bottom py-2 d-flex justify-content-between align-items-center"
-                >
-                    {editingId === comment._id ? (
-                        <InputGroup className="w-100">
-                            <Form.Control
-                                type="text"
-                                value={editingText}
-                                onChange={(e) => setEditingText(e.target.value)}
-                                disabled={loadingUpdate}
-                            />
-                            <Button
-                                variant="success"
-                                onClick={() => confirmEdit(comment._id)}
-                                disabled={loadingUpdate}
-                            >
-                                Save
-                            </Button>
-                            <Button variant="secondary" onClick={cancelEdit}>
-                                Cancel
-                            </Button>
-                        </InputGroup>
-                    ) : (
-                        <>
-                            <span>
-                                {comment.text} - <em>{comment.author?.name || "Anonymous"}</em>
-                            </span>
-                            <div>
+            {comments.map((comment) => {
+                const isOwner = me?._id === comment.author?._id;
+                return (
+                    <div
+                        key={comment._id}
+                        className="border-bottom py-2 d-flex justify-content-between align-items-center"
+                    >
+                        {editingId === comment._id ? (
+                            <InputGroup className="w-100">
+                                <Form.Control
+                                    type="text"
+                                    value={editingText}
+                                    onChange={(e) => setEditingText(e.target.value)}
+                                    disabled={loadingUpdate}
+                                />
                                 <Button
-                                    size="sm"
-                                    variant="warning"
-                                    className="me-2"
-                                    onClick={() => startEdit(comment)}
+                                    variant="success"
+                                    onClick={() => confirmEdit(comment._id)}
+                                    disabled={loadingUpdate}
                                 >
-                                    Edit
+                                    Save
                                 </Button>
-                                <Button size="sm" variant="danger" onClick={() => openDeleteModal(comment)}>
-                                    Delete
+                                <Button variant="secondary" onClick={cancelEdit}>
+                                    Cancel
                                 </Button>
-                            </div>
-                        </>
-                    )}
-                </div>
-            ))}
-
+                            </InputGroup>
+                        ) : (
+                            <>
+                                <span>
+                                    {comment.text} - <em>{comment.author?.name || "Anonymous"}</em>
+                                </span>
+                                {isOwner && (
+                                    <div>
+                                        <Button
+                                            size="sm"
+                                            variant="warning"
+                                            className="me-2"
+                                            onClick={() => startEdit(comment)}
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button size="sm" variant="danger" onClick={() => openDeleteModal(comment)}>
+                                            Delete
+                                        </Button>
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </div>
+                );
+            })}
 
             <InputGroup className="mt-3">
                 <Form.Control
